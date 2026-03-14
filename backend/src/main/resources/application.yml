@@ -7,12 +7,8 @@ spring:
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
-      ddl-auto: update
-    show-sql: false
-  flyway:
-    enabled: true
-    locations: classpath:db/migration
-    baseline-on-migrate: true
+      ddl-auto: create-drop
+    show-sql: true
 
 server:
   port: 8080

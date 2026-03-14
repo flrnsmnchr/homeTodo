@@ -23,10 +23,12 @@ dependencies {
     
     // SQLite JDBC driver
     implementation 'org.xerial:sqlite-jdbc:3.46.1.0'
-    implementation 'org.hibernate.orm:hibernate-community-dialects:6.6.3.Final'
     
     // Flyway for database migrations
     implementation 'org.flywaydb:flyway-core:11.0.1'
+    
+    // Hibernate SQLite dialect (included in ormol-community-dialects)
+    implementation 'org.hibernate.orm:hibernate-community-dialects:6.6.3.Final'
     
     // DevTools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

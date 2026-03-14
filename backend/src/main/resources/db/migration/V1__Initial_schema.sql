@@ -41,3 +41,8 @@ CREATE TABLE task_activity_log (
     FOREIGN KEY (task_id) REFERENCES tasks(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+-- Default users for testing
+INSERT INTO users (name, created_at) VALUES ('Alice', CURRENT_TIMESTAMP);
+INSERT INTO users (name, created_at) VALUES ('Bob', CURRENT_TIMESTAMP);
+INSERT INTO users (name, created_at) VALUES ('Charlie', CURRENT_TIMESTAMP);
