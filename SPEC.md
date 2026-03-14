@@ -4,7 +4,7 @@
 
 ### User Login
 
--   A user can log in with username no password
+-   A user can log in with username no password. This is intentionally simple for the testing phase and is NOT production-ready security.
 
 ### User Profile
 
@@ -16,8 +16,7 @@ A user profile contains: - Name only
 
 ### Create Task
 
-Users can create tasks with: - Title - Description - Category (Cleaning,
-Groceries, Laundry, etc.) - Due date (optional) - Assigned user
+Users can create tasks with: - Title - Description - Due date (optional) - Assigned user
 (optional)
 
 ### Edit Task
@@ -93,7 +92,7 @@ Tasks can be filtered by: - Status - Category - Assigned user
 
 ### Sorting
 
-Tasks can be sorted by: - Due date - Creation date - Priority
+Tasks can be sorted by: - Due date - Creation date
 
 ------------------------------------------------------------------------
 
@@ -101,7 +100,7 @@ Tasks can be sorted by: - Due date - Creation date - Priority
 
 ### Recurring Tasks
 
-Tasks can repeat: - Daily - Weekly - Monthly
+Tasks can repeat: - Daily - Weekly - Monthly (same day each month)
 
 ### Automatic Recreation
 
@@ -117,7 +116,9 @@ milk (as needed)
 ### Task Notifications
 
 Users receive notifications when: - A task is assigned to them - A task
-is due soon
+is due on its due date
+
+Notifications are displayed on the login page when the user logs in.
 
 ### Completion Notifications
 
@@ -148,10 +149,6 @@ week
 
 -   All actions are recorded and stored.
 
-### Household Data Separation
-
--   Data is separated between households.
-
 ------------------------------------------------------------------------
 
 ## Multi-Device Access
@@ -162,8 +159,7 @@ week
 
 ### Mobile Support
 
--   The app is usable on smartphones, Android and Iphone
-story
+-   The app runs in the browser on all devices including smartphones. Use responsive design for mobile-friendly experience. No PWA or native mobile app needed.
 
 # Tech Stack Specification -- Family Household Todo App
 
@@ -178,7 +174,7 @@ history tracking
 
 ## Language
 
-Java 25
+Java 24
 
 ## Build System
 
@@ -252,6 +248,8 @@ Excellent React + TypeScript support
 
 Tailwind CSS
 
+Note: State management should be kept as simple as possible (use React Context or local state).
+
 ------------------------------------------------------------------------
 
 # API Communication
@@ -262,11 +260,13 @@ Architecture:
             |
             | REST / JSON
             |
-    Spring Boot (Java 25)
+    Spring Boot (Java 24)
             |
     Spring Data JPA / Hibernate
             |
     SQLite Database
+
+Note: No authentication is required for the API endpoints (testing phase only).
 
 ## Example API Endpoints
 
@@ -285,7 +285,7 @@ History:
 Users:
 
     GET    /api/users
-    POST   /api/users
+    (POST for registration not needed - users are inserted directly into the database for testing)
 
 ------------------------------------------------------------------------
 
@@ -350,7 +350,6 @@ Relationships:
     id
     title
     description
-    category
     status
     createdAt
     dueDate
