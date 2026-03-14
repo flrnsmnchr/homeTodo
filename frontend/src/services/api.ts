@@ -38,16 +38,16 @@ export const api = {
   getCompletedTasks: () => request<Task[]>(`${API_BASE}/tasks/completed`),
   getMyTasks: (userId: number) => request<Task[]>(`${API_BASE}/tasks/my-tasks/${userId}`),
   
-  createTask: (request: CreateTaskRequest, createdByUserId: number) =>
+  createTask: (taskRequest: CreateTaskRequest, createdByUserId: number) => 
     request<Task>(`${API_BASE}/tasks?createdByUserId=${createdByUserId}`, {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(taskRequest),
     }),
   
-  updateTask: (id: number, request: UpdateTaskRequest, userId: number) =>
+  updateTask: (id: number, taskRequest: UpdateTaskRequest, userId: number) =>
     request<Task>(`${API_BASE}/tasks/${id}?userId=${userId}`, {
       method: 'PUT',
-      body: JSON.stringify(request),
+      body: JSON.stringify(taskRequest),
     }),
   
   deleteTask: (id: number) =>
