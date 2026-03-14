@@ -362,6 +362,15 @@ Relationships:
     taskId
     completedByUserId
     completedAt
+------------------------------------------------------------------------
+
+# Testing
+
+Create unit tests for the java backend and the typescript front end.
+
+Use junit jupiter for java testing.
+
+Use vitest for frontent testing. Create snapshot tests for all components.
 
 ------------------------------------------------------------------------
 
