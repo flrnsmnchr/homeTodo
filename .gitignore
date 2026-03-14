@@ -3,3 +3,4 @@ backend/.settings
 backend/.gradle
 backend/build/*
 frontend/node_modules/*
+backend/bin
