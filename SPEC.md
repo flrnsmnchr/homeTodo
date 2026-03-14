@@ -164,3 +164,248 @@ week
 
 -   The app is usable on smartphones, Android and Iphone
 story
+
+# Tech Stack Specification -- Family Household Todo App
+
+# Backend
+
+## Framework
+
+Spring Boot
+
+Responsibilities: - REST API - Business logic - Persistence - Task
+history tracking
+
+## Language
+
+Java 25
+
+## Build System
+
+Gradle with Groovy DSL
+
+Main build file:
+
+    build.gradle
+
+Advantages: - Fast builds - Concise dependency configuration - Excellent
+Spring Boot integration
+
+## Persistence Layer
+
+ORM stack: - Spring Data JPA - Hibernate
+
+Responsibilities: - Entity mapping - Repository abstraction - CRUD
+operations
+
+## Database
+
+SQLite
+
+Characteristics: - File-based database - Zero configuration -
+Lightweight - Ideal for small applications
+
+## Database Migration
+
+Flyway
+
+Purpose: - Version-controlled schema - Reproducible environments -
+Easier schema evolution
+
+Migration location:
+
+    src/main/resources/db/migration
+
+## Backend Dependencies
+
+Recommended modules:
+
+-   Spring Web
+-   Spring Data JPA
+-   SQLite JDBC driver
+-   Flyway
+-   Spring Boot DevTools
+
+------------------------------------------------------------------------
+
+# Frontend
+
+## Framework
+
+React
+
+Responsibilities: - UI rendering - Interactive task management -
+Dashboards - Filtering and sorting
+
+## Language
+
+TypeScript
+
+## Frontend Build Tool
+
+Vite
+
+Reasons: - Extremely fast dev server - Optimized production builds -
+Excellent React + TypeScript support
+
+## Styling Framework
+
+Tailwind CSS
+
+------------------------------------------------------------------------
+
+# API Communication
+
+Architecture:
+
+    React (TypeScript + Tailwind)
+            |
+            | REST / JSON
+            |
+    Spring Boot (Java 25)
+            |
+    Spring Data JPA / Hibernate
+            |
+    SQLite Database
+
+## Example API Endpoints
+
+Tasks:
+
+    GET    /api/tasks
+    POST   /api/tasks
+    PUT    /api/tasks/{id}
+    DELETE /api/tasks/{id}
+    POST   /api/tasks/{id}/complete
+
+History:
+
+    GET /api/history
+
+Users:
+
+    GET    /api/users
+    POST   /api/users
+
+------------------------------------------------------------------------
+
+# Project Structure
+
+## Backend
+
+    backend/
+
+    src/main/java/net/simnacher/hometodo
+
+        controller/
+        service/
+        repository/
+        model/
+        dto/
+
+    src/main/resources
+        application.yml
+        db/migration
+
+## Frontend
+
+    frontend/
+
+    src/
+      components/
+      pages/
+      services/
+      hooks/
+      types/
+
+      App.tsx
+      main.tsx
+
+------------------------------------------------------------------------
+
+# Data Model
+
+Single household assumption: no Household entity.
+
+Entities:
+
+    User
+    Task
+    TaskCompletion
+
+Relationships:
+
+    User
+      |
+      | completes
+      |
+    TaskCompletion
+      |
+      | refers to
+      |
+    Task
+
+## Example Task Fields
+
+    id
+    title
+    description
+    category
+    status
+    createdAt
+    dueDate
+    assignedUserId
+
+## TaskCompletion Fields
+
+    id
+    taskId
+    completedByUserId
+    completedAt
+
+------------------------------------------------------------------------
+
+# Development Workflow
+
+Backend:
+
+    ./gradlew bootRun
+
+Runs on:
+
+    localhost:8080
+
+Frontend:
+
+    npm install
+    npm run dev
+
+Runs on:
+
+    localhost:5173
+
+------------------------------------------------------------------------
+
+# Version Control
+
+Version control system: Git
+
+Repository hosting: GitHub
+
+------------------------------------------------------------------------
+
+# Final Architecture
+
+    Frontend
+    React + TypeScript + Tailwind
+            |
+            | REST API
+            |
+    Backend
+    Spring Boot (Java 25 + Gradle Groovy)
+            |
+    Persistence
+    Spring Data JPA + Hibernate
+            |
+    Database
+    SQLite
