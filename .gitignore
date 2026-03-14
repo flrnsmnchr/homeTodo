@@ -1,0 +1,5 @@
+backend/.project
+backend/.settings
+backend/.gradle
+backend/build/*
+frontend/node_modules/*
