@@ -174,11 +174,13 @@ history tracking
 
 ## Language
 
-Java 24
+Java 25
 
 ## Build System
 
-Gradle with Groovy DSL
+Gradle 9.4.0 (with Groovy DSL)
+
+Note: Uses locally installed Gradle. Run with: `gradle bootRun`
 
 Main build file:
 
@@ -260,7 +262,7 @@ Architecture:
             |
             | REST / JSON
             |
-    Spring Boot (Java 24)
+    Spring Boot (Java 25)
             |
     Spring Data JPA / Hibernate
             |
