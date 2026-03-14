@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Task, User, CreateTaskRequest, UpdateTaskRequest, RecurrenceType } from '../types';
+import type { Task, User, CreateTaskRequest, UpdateTaskRequest, RecurrenceType } from '../types';
 
 interface TaskFormProps {
   task?: Task | null;

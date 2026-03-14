@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { User, Task, CreateTaskRequest, UpdateTaskRequest, TaskStatus } from '../types';
+import type { User, Task, CreateTaskRequest, UpdateTaskRequest, TaskStatus } from '../types';
 import { api } from '../services/api';
 import { TaskList } from '../components/TaskList';
 import { TaskForm } from '../components/TaskForm';

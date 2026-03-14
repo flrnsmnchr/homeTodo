@@ -1,4 +1,4 @@
-import { User, Task, CreateTaskRequest, UpdateTaskRequest, ActivityLog, TaskStatus } from '../types';
+import type { User, Task, CreateTaskRequest, UpdateTaskRequest, ActivityLog, TaskStatus } from '../types';
 
 const API_BASE = 'http://localhost:8080/api';
 

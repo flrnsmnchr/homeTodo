@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User } from './types';
+import type { User } from './types';
 import { LoginPage } from './pages/LoginPage';
 import { Dashboard } from './pages/Dashboard';
 

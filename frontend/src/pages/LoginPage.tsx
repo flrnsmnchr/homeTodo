@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { User, ActivityLog } from '../types';
+import type { User, ActivityLog } from '../types';
 import { api } from '../services/api';
 
 interface LoginPageProps {
