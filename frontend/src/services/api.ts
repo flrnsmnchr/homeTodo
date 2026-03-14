@@ -1,6 +1,6 @@
 import type { User, Task, CreateTaskRequest, UpdateTaskRequest, ActivityLog, TaskStatus } from '../types';
 
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = '/api';
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, {
