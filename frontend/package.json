@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "node ./scripts/copy-dist-to-backend.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
