@@ -4,12 +4,11 @@ import type { Task, User, CreateTaskRequest, UpdateTaskRequest, RecurrenceType }
 interface TaskFormProps {
   task?: Task | null;
   users: User[];
-  currentUserId: number;
   onSubmit: (request: CreateTaskRequest | UpdateTaskRequest) => void;
   onCancel: () => void;
 }
 
-export function TaskForm({ task, users, currentUserId, onSubmit, onCancel }: TaskFormProps) {
+export function TaskForm({ task, users, onSubmit, onCancel }: TaskFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');

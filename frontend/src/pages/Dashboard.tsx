@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { User, Task, CreateTaskRequest, UpdateTaskRequest, TaskStatus } from '../types';
+import type { User, Task, CreateTaskRequest, UpdateTaskRequest } from '../types';
 import { api } from '../services/api';
 import { TaskList } from '../components/TaskList';
 import { TaskForm } from '../components/TaskForm';
@@ -207,8 +207,13 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
             <TaskForm
               task={editingTask}
               users={users}
-              currentUserId={currentUser.id}
-              onSubmit={editingTask ? handleUpdateTask : handleCreateTask}
+              onSubmit={(request) => {
+                if (editingTask) {
+                  handleUpdateTask(request as UpdateTaskRequest);
+                } else {
+                  handleCreateTask(request as CreateTaskRequest);
+                }
+              }}
               onCancel={() => {
                 setShowForm(false);
                 setEditingTask(null);
