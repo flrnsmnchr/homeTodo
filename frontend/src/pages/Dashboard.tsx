@@ -19,7 +19,7 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
   const [showForm, setShowForm] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [filter, setFilter] = useState<FilterType>('open');
-  const [sortBy, setSortBy] = useState<SortType>('createdAt');
+  const [sortBy, setSortBy] = useState<SortType>('dueDate');
 
   const loadTasks = useCallback(async () => {
     try {

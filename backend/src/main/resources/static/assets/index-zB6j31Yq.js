@@ -10315,7 +10315,7 @@ function Dashboard({ currentUser, onLogout }) {
 	const [showForm, setShowForm] = (0, import_react.useState)(false);
 	const [editingTask, setEditingTask] = (0, import_react.useState)(null);
 	const [filter, setFilter] = (0, import_react.useState)("open");
-	const [sortBy, setSortBy] = (0, import_react.useState)("createdAt");
+	const [sortBy, setSortBy] = (0, import_react.useState)("dueDate");
 	const loadTasks = (0, import_react.useCallback)(async () => {
 		try {
 			let tasksData;
