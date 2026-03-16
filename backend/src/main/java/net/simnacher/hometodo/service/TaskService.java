@@ -166,7 +166,7 @@ public class TaskService {
                 completedTask.getTitle(),
                 completedTask.getDescription(),
                 nextDueDate,
-                completedTask.getAssignedUser(),
+                null,
                 user
         );
         newTask.setRecurrence(completedTask.getRecurrence());

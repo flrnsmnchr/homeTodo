@@ -5,3 +5,4 @@ backend/build/*
 frontend/node_modules/*
 backend/bin
 backend/.classpath
+backend/hometodo.db
