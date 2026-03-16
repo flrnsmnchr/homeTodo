@@ -46,6 +46,8 @@ describe('Dashboard', () => {
   });
 
   it('renders loading state initially', () => {
+    (api.getUsers as any).mockReturnValue(new Promise(() => {}));
+    (api.getOpenTasks as any).mockReturnValue(new Promise(() => {}));
     const { asFragment } = render(<Dashboard currentUser={mockUser} onLogout={vi.fn()} />);
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
     expect(asFragment()).toMatchSnapshot();
