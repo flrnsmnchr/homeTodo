@@ -9904,7 +9904,9 @@ async function request(url, options) {
 		}
 	});
 	if (!response.ok) throw new Error(`API Error: ${response.status}`);
-	return response.json();
+	if (response.status === 204) return null;
+	const text = await response.text();
+	return text ? JSON.parse(text) : null;
 }
 var api = {
 	getUsers: () => request(`${API_BASE}/users`),
