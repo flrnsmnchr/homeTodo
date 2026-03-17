@@ -15,7 +15,12 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
     throw new Error(`API Error: ${response.status}`);
   }
   
-  return response.json();
+  if (response.status === 204) {
+    return null as T;
+  }
+  
+  const text = await response.text();
+  return text ? JSON.parse(text) : (null as T);
 }
 
 export const api = {
