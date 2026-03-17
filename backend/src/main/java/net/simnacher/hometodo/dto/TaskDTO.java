@@ -109,4 +109,21 @@ public class TaskDTO {
     public void setRecurrence(RecurrenceType recurrence) {
         this.recurrence = recurrence;
     }
+
+    @Override
+    public String toString() {
+        return "TaskDTO{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", dueDate=" + dueDate +
+                ", assignedUserId=" + assignedUserId +
+                ", assignedUserName='" + assignedUserName + '\'' +
+                ", createdByUserId=" + createdByUserId +
+                ", createdByUserName='" + createdByUserName + '\'' +
+                ", recurrence=" + recurrence +
+                '}';
+    }
 }

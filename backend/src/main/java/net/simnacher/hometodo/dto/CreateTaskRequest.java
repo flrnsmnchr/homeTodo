@@ -54,4 +54,15 @@ public class CreateTaskRequest {
     public void setRecurrence(RecurrenceType recurrence) {
         this.recurrence = recurrence;
     }
+
+    @Override
+    public String toString() {
+        return "CreateTaskRequest{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", dueDate=" + dueDate +
+                ", assignedUserId=" + assignedUserId +
+                ", recurrence=" + recurrence +
+                '}';
+    }
 }
