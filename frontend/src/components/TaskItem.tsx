@@ -21,15 +21,17 @@ export function TaskItem({ task, currentUserId, onComplete, onUncomplete, onDele
 
   return (
     <div className={`p-4 border rounded-lg mb-2 ${isCompleted ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'}`}>
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <h3 className={`font-semibold text-lg ${isCompleted ? 'line-through text-gray-500' : 'text-gray-800'}`}>
-            {task.title}
-          </h3>
-          {task.description && (
-            <p className="text-gray-600 mt-1">{task.description}</p>
-          )}
-          <div className="flex gap-4 mt-2 text-sm text-gray-500">
+      <div className="flex items-stretch justify-between">
+        <div className="flex-1 flex flex-col">
+          <div>
+            <h3 className={`font-semibold text-lg ${isCompleted ? 'line-through text-gray-500' : 'text-gray-800'}`}>
+              {task.title}
+            </h3>
+            {task.description && (
+              <p className="text-gray-600 mt-1">{task.description}</p>
+            )}
+          </div>
+          <div className="flex gap-4 mt-auto pt-2 text-sm text-gray-500">
             {task.assignedUserName && (
               <span className={`px-2 py-0.5 rounded ${isAssignedToMe ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}>
                 {task.assignedUserName}
@@ -43,7 +45,7 @@ export function TaskItem({ task, currentUserId, onComplete, onUncomplete, onDele
             )}
           </div>
         </div>
-        <div className="flex gap-2 ml-4">
+        <div className="flex flex-col gap-2 ml-4">
           {!isCompleted ? (
             <button
               onClick={() => onComplete(task.id)}

@@ -10101,35 +10101,31 @@ function TaskItem({ task, currentUserId, onComplete, onUncomplete, onDelete, onE
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: `p-4 border rounded-lg mb-2 ${isCompleted ? "bg-green-50 border-green-200" : "bg-white border-gray-200"}`,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "flex items-start justify-between",
+			className: "flex items-stretch justify-between",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex-1",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-						className: `font-semibold text-lg ${isCompleted ? "line-through text-gray-500" : "text-gray-800"}`,
-						children: task.title
-					}),
-					task.description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						className: "text-gray-600 mt-1",
-						children: task.description
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex gap-4 mt-2 text-sm text-gray-500",
-						children: [
-							task.assignedUserName && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: `px-2 py-0.5 rounded ${isAssignedToMe ? "bg-blue-100 text-blue-800" : "bg-gray-100"}`,
-								children: task.assignedUserName
-							}),
-							task.dueDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Due: ", formatDate(task.dueDate)] }),
-							task.recurrence && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "text-purple-600",
-								children: ["🔄 ", task.recurrence.toLowerCase()]
-							})
-						]
-					})
-				]
+				className: "flex-1 flex flex-col",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+					className: `font-semibold text-lg ${isCompleted ? "line-through text-gray-500" : "text-gray-800"}`,
+					children: task.title
+				}), task.description && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-gray-600 mt-1",
+					children: task.description
+				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex gap-4 mt-auto pt-2 text-sm text-gray-500",
+					children: [
+						task.assignedUserName && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: `px-2 py-0.5 rounded ${isAssignedToMe ? "bg-blue-100 text-blue-800" : "bg-gray-100"}`,
+							children: task.assignedUserName
+						}),
+						task.dueDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Due: ", formatDate(task.dueDate)] }),
+						task.recurrence && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "text-purple-600",
+							children: ["🔄 ", task.recurrence.toLowerCase()]
+						})
+					]
+				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex gap-2 ml-4",
+				className: "flex flex-col gap-2 ml-4",
 				children: [
 					!isCompleted ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => onComplete(task.id),
