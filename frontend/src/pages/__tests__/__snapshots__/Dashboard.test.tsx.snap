@@ -93,23 +93,25 @@ exports[`Dashboard > renders dashboard with tasks after loading (snapshot) 1`] =
           class="p-4 border rounded-lg mb-2 bg-white border-gray-200"
         >
           <div
-            class="flex items-start justify-between"
+            class="flex items-stretch justify-between"
           >
             <div
-              class="flex-1"
+              class="flex-1 flex flex-col"
             >
-              <h3
-                class="font-semibold text-lg text-gray-800"
-              >
-                Task 1
-              </h3>
-              <p
-                class="text-gray-600 mt-1"
-              >
-                Desc 1
-              </p>
+              <div>
+                <h3
+                  class="font-semibold text-lg text-gray-800"
+                >
+                  Task 1
+                </h3>
+                <p
+                  class="text-gray-600 mt-1"
+                >
+                  Desc 1
+                </p>
+              </div>
               <div
-                class="flex gap-4 mt-2 text-sm text-gray-500"
+                class="flex gap-4 mt-auto pt-2 text-sm text-gray-500"
               >
                 <span
                   class="px-2 py-0.5 rounded bg-blue-100 text-blue-800"
@@ -119,7 +121,7 @@ exports[`Dashboard > renders dashboard with tasks after loading (snapshot) 1`] =
               </div>
             </div>
             <div
-              class="flex gap-2 ml-4"
+              class="flex flex-col gap-2 ml-4"
             >
               <button
                 class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm"

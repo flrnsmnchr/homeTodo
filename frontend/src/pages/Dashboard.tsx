@@ -17,7 +17,6 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [filter, setFilter] = useState<FilterType>('open');
   const [sortBy, setSortBy] = useState<SortType>('dueDate');
 
@@ -83,11 +82,9 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
     }
   };
 
-  const handleUpdateTask = async (request: UpdateTaskRequest) => {
-    if (!editingTask) return;
+  const handleUpdateTask = async (taskId: number, request: UpdateTaskRequest) => {
     try {
-      await api.updateTask(editingTask.id, request, currentUser.id);
-      setEditingTask(null);
+      await api.updateTask(taskId, request, currentUser.id);
       await loadTasks();
     } catch (error) {
       console.error('Error updating task:', error);
@@ -120,10 +117,6 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
     } catch (error) {
       console.error('Error deleting task:', error);
     }
-  };
-
-  const handleEdit = (task: Task) => {
-    setEditingTask(task);
   };
 
   if (loading) {
@@ -201,23 +194,13 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
           </div>
         </div>
 
-        {/* Task Form */}
-        {(showForm || editingTask) && (
+        {/* Create Task Form */}
+        {showForm && (
           <div className="mb-6">
             <TaskForm
-              task={editingTask}
               users={users}
-              onSubmit={(request) => {
-                if (editingTask) {
-                  handleUpdateTask(request as UpdateTaskRequest);
-                } else {
-                  handleCreateTask(request as CreateTaskRequest);
-                }
-              }}
-              onCancel={() => {
-                setShowForm(false);
-                setEditingTask(null);
-              }}
+              onSubmit={(request) => handleCreateTask(request as CreateTaskRequest)}
+              onCancel={() => setShowForm(false)}
             />
           </div>
         )}
@@ -225,11 +208,12 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
         {/* Task List */}
         <TaskList
           tasks={tasks}
+          users={users}
           currentUserId={currentUser.id}
           onComplete={handleComplete}
           onUncomplete={handleUncomplete}
           onDelete={handleDelete}
-          onEdit={handleEdit}
+          onUpdate={handleUpdateTask}
         />
       </main>
     </div>

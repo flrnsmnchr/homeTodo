@@ -6,7 +6,7 @@ interface TaskItemProps {
   onComplete: (taskId: number) => void;
   onUncomplete: (taskId: number) => void;
   onDelete: (taskId: number) => void;
-  onEdit: (task: Task) => void;
+  onEdit: () => void;
 }
 
 export function TaskItem({ task, currentUserId, onComplete, onUncomplete, onDelete, onEdit }: TaskItemProps) {
@@ -62,7 +62,7 @@ export function TaskItem({ task, currentUserId, onComplete, onUncomplete, onDele
             </button>
           )}
           <button
-            onClick={() => onEdit(task)}
+            onClick={() => onEdit()}
             className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
           >
             Edit

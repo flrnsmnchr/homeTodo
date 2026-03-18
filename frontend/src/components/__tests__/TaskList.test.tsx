@@ -35,11 +35,12 @@ describe('TaskList', () => {
 
   const mockProps = {
     tasks: mockTasks,
+    users: [{ id: 1, name: 'User 1' }],
     currentUserId: 1,
     onComplete: vi.fn(),
     onUncomplete: vi.fn(),
     onDelete: vi.fn(),
-    onEdit: vi.fn()
+    onUpdate: vi.fn(async (_id, _req) => {})
   };
 
   it('renders correctly (snapshot)', () => {

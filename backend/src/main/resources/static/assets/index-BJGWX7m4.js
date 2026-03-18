@@ -10137,7 +10137,7 @@ function TaskItem({ task, currentUserId, onComplete, onUncomplete, onDelete, onE
 						children: "↩"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						onClick: () => onEdit(task),
+						onClick: () => onEdit(),
 						className: "px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm",
 						children: "Edit"
 					}),
@@ -10149,25 +10149,6 @@ function TaskItem({ task, currentUserId, onComplete, onUncomplete, onDelete, onE
 				]
 			})]
 		})
-	});
-}
-//#endregion
-//#region src/components/TaskList.tsx
-function TaskList({ tasks, currentUserId, onComplete, onUncomplete, onDelete, onEdit }) {
-	if (tasks.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "text-center py-8 text-gray-500",
-		children: "No tasks found"
-	});
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "space-y-2",
-		children: tasks.map((task) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TaskItem, {
-			task,
-			currentUserId,
-			onComplete,
-			onUncomplete,
-			onDelete,
-			onEdit
-		}, task.id))
 	});
 }
 //#endregion
@@ -10305,13 +10286,44 @@ function TaskForm({ task, users, onSubmit, onCancel }) {
 	});
 }
 //#endregion
+//#region src/components/TaskList.tsx
+function TaskList({ tasks, users, currentUserId, onComplete, onUncomplete, onDelete, onUpdate }) {
+	const [editingTaskId, setEditingTaskId] = (0, import_react.useState)(null);
+	if (tasks.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "text-center py-8 text-gray-500",
+		children: "No tasks found"
+	});
+	const handleEditSubmit = async (taskId, request) => {
+		await onUpdate(taskId, request);
+		setEditingTaskId(null);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "space-y-2",
+		children: tasks.map((task) => editingTaskId === task.id ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "mb-2",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TaskForm, {
+				task,
+				users,
+				onSubmit: (request) => handleEditSubmit(task.id, request),
+				onCancel: () => setEditingTaskId(null)
+			})
+		}, task.id) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TaskItem, {
+			task,
+			currentUserId,
+			onComplete,
+			onUncomplete,
+			onDelete,
+			onEdit: () => setEditingTaskId(task.id)
+		}, task.id))
+	});
+}
+//#endregion
 //#region src/pages/Dashboard.tsx
 function Dashboard({ currentUser, onLogout }) {
 	const [users, setUsers] = (0, import_react.useState)([]);
 	const [tasks, setTasks] = (0, import_react.useState)([]);
 	const [loading, setLoading] = (0, import_react.useState)(true);
 	const [showForm, setShowForm] = (0, import_react.useState)(false);
-	const [editingTask, setEditingTask] = (0, import_react.useState)(null);
 	const [filter, setFilter] = (0, import_react.useState)("open");
 	const [sortBy, setSortBy] = (0, import_react.useState)("dueDate");
 	const loadTasks = (0, import_react.useCallback)(async () => {
@@ -10370,11 +10382,9 @@ function Dashboard({ currentUser, onLogout }) {
 			console.error("Error creating task:", error);
 		}
 	};
-	const handleUpdateTask = async (request) => {
-		if (!editingTask) return;
+	const handleUpdateTask = async (taskId, request) => {
 		try {
-			await api.updateTask(editingTask.id, request, currentUser.id);
-			setEditingTask(null);
+			await api.updateTask(taskId, request, currentUser.id);
 			await loadTasks();
 		} catch (error) {
 			console.error("Error updating task:", error);
@@ -10404,9 +10414,6 @@ function Dashboard({ currentUser, onLogout }) {
 		} catch (error) {
 			console.error("Error deleting task:", error);
 		}
-	};
-	const handleEdit = (task) => {
-		setEditingTask(task);
 	};
 	if (loading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "min-h-screen flex items-center justify-center bg-gray-100",
@@ -10485,28 +10492,22 @@ function Dashboard({ currentUser, onLogout }) {
 						})]
 					})]
 				}),
-				(showForm || editingTask) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				showForm && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "mb-6",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TaskForm, {
-						task: editingTask,
 						users,
-						onSubmit: (request) => {
-							if (editingTask) handleUpdateTask(request);
-							else handleCreateTask(request);
-						},
-						onCancel: () => {
-							setShowForm(false);
-							setEditingTask(null);
-						}
+						onSubmit: (request) => handleCreateTask(request),
+						onCancel: () => setShowForm(false)
 					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TaskList, {
 					tasks,
+					users,
 					currentUserId: currentUser.id,
 					onComplete: handleComplete,
 					onUncomplete: handleUncomplete,
 					onDelete: handleDelete,
-					onEdit: handleEdit
+					onUpdate: handleUpdateTask
 				})
 			]
 		})]
