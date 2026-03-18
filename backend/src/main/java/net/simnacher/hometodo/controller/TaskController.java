@@ -31,9 +31,7 @@ public class TaskController {
         
         List<TaskDTO> result;
         if (status != null && assignedUserId != null) {
-            result = taskService.getTasksByStatus(status).stream()
-                    .filter(t -> assignedUserId.equals(t.getAssignedUserId()))
-                    .toList();
+            result = taskService.getTasksByStatusAndAssignedUser(status, assignedUserId);
         } else if (status != null) {
             result = taskService.getTasksByStatus(status);
         } else if (assignedUserId != null) {

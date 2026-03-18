@@ -8,7 +8,7 @@ vi.mock('../services/api', () => ({
   api: {
     getUsers: vi.fn(),
     getHistory: vi.fn(),
-    getOpenTasks: vi.fn(),
+    getTasks: vi.fn(),
   }
 }));
 
@@ -17,7 +17,7 @@ describe('App', () => {
     vi.clearAllMocks();
     (api.getUsers as any).mockResolvedValue([{ id: 1, name: 'Test User' }]);
     (api.getHistory as any).mockResolvedValue([]);
-    (api.getOpenTasks as any).mockResolvedValue([]);
+    (api.getTasks as any).mockResolvedValue([]);
   });
 
   it('renders login page initially (snapshot)', async () => {

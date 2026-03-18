@@ -36,37 +36,73 @@ exports[`Dashboard > renders dashboard with tasks after loading (snapshot) 1`] =
       class="max-w-7xl mx-auto px-4 py-6"
     >
       <div
-        class="mb-6 flex flex-wrap gap-4 items-center justify-between"
+        class="mb-6 flex flex-wrap gap-6 items-center justify-between"
       >
         <div
-          class="flex gap-2"
+          class="flex flex-wrap gap-6"
         >
-          <button
-            class="px-4 py-2 rounded bg-blue-500 text-white"
+          <div
+            class="flex flex-col gap-2"
           >
-            Open
-          </button>
-          <button
-            class="px-4 py-2 rounded bg-white text-gray-700 border"
+            <span
+              class="text-sm font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Status
+            </span>
+            <div
+              class="flex gap-2"
+            >
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-blue-600 text-white"
+              >
+                Open
+              </button>
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
+              >
+                In Progress
+              </button>
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
+              >
+                Completed
+              </button>
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
+              >
+                All
+              </button>
+            </div>
+          </div>
+          <div
+            class="flex flex-col gap-2"
           >
-            Completed
-          </button>
-          <button
-            class="px-4 py-2 rounded bg-white text-gray-700 border"
-          >
-            My Tasks
-          </button>
-          <button
-            class="px-4 py-2 rounded bg-white text-gray-700 border"
-          >
-            All
-          </button>
+            <span
+              class="text-sm font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Assignee
+            </span>
+            <div
+              class="flex gap-2"
+            >
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
+              >
+                My Tasks
+              </button>
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-blue-600 text-white"
+              >
+                All Tasks
+              </button>
+            </div>
+          </div>
         </div>
         <div
           class="flex gap-4 items-center"
         >
           <select
-            class="px-3 py-2 border rounded bg-white"
+            class="px-3 py-2 border rounded bg-white text-sm"
           >
             <option
               value="createdAt"
@@ -80,7 +116,7 @@ exports[`Dashboard > renders dashboard with tasks after loading (snapshot) 1`] =
             </option>
           </select>
           <button
-            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm font-medium"
           >
             + New Task
           </button>
@@ -183,37 +219,73 @@ exports[`Dashboard > renders empty dashboard correctly (snapshot) 1`] = `
       class="max-w-7xl mx-auto px-4 py-6"
     >
       <div
-        class="mb-6 flex flex-wrap gap-4 items-center justify-between"
+        class="mb-6 flex flex-wrap gap-6 items-center justify-between"
       >
         <div
-          class="flex gap-2"
+          class="flex flex-wrap gap-6"
         >
-          <button
-            class="px-4 py-2 rounded bg-blue-500 text-white"
+          <div
+            class="flex flex-col gap-2"
           >
-            Open
-          </button>
-          <button
-            class="px-4 py-2 rounded bg-white text-gray-700 border"
+            <span
+              class="text-sm font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Status
+            </span>
+            <div
+              class="flex gap-2"
+            >
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-blue-600 text-white"
+              >
+                Open
+              </button>
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
+              >
+                In Progress
+              </button>
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
+              >
+                Completed
+              </button>
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
+              >
+                All
+              </button>
+            </div>
+          </div>
+          <div
+            class="flex flex-col gap-2"
           >
-            Completed
-          </button>
-          <button
-            class="px-4 py-2 rounded bg-white text-gray-700 border"
-          >
-            My Tasks
-          </button>
-          <button
-            class="px-4 py-2 rounded bg-white text-gray-700 border"
-          >
-            All
-          </button>
+            <span
+              class="text-sm font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Assignee
+            </span>
+            <div
+              class="flex gap-2"
+            >
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
+              >
+                My Tasks
+              </button>
+              <button
+                class="px-3 py-1.5 text-sm rounded transition-colors bg-blue-600 text-white"
+              >
+                All Tasks
+              </button>
+            </div>
+          </div>
         </div>
         <div
           class="flex gap-4 items-center"
         >
           <select
-            class="px-3 py-2 border rounded bg-white"
+            class="px-3 py-2 border rounded bg-white text-sm"
           >
             <option
               value="createdAt"
@@ -227,7 +299,7 @@ exports[`Dashboard > renders empty dashboard correctly (snapshot) 1`] = `
             </option>
           </select>
           <button
-            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm font-medium"
           >
             + New Task
           </button>

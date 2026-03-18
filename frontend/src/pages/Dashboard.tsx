@@ -4,7 +4,8 @@ import { api } from '../services/api';
 import { TaskList } from '../components/TaskList';
 import { TaskForm } from '../components/TaskForm';
 
-type FilterType = 'all' | 'open' | 'completed' | 'my-tasks';
+type StatusFilter = 'ALL' | 'OPEN' | 'IN_PROGRESS' | 'COMPLETED';
+type AssigneeFilter = 'ALL' | 'MY_TASKS';
 type SortType = 'createdAt' | 'dueDate';
 
 interface DashboardProps {
@@ -17,26 +18,16 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [filter, setFilter] = useState<FilterType>('open');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('OPEN');
+  const [assigneeFilter, setAssigneeFilter] = useState<AssigneeFilter>('ALL');
   const [sortBy, setSortBy] = useState<SortType>('dueDate');
 
   const loadTasks = useCallback(async () => {
     try {
-      let tasksData: Task[];
+      const status = statusFilter === 'ALL' ? undefined : statusFilter as Task['status'];
+      const assignedUserId = assigneeFilter === 'MY_TASKS' ? currentUser.id : undefined;
       
-      switch (filter) {
-        case 'open':
-          tasksData = await api.getOpenTasks();
-          break;
-        case 'completed':
-          tasksData = await api.getCompletedTasks();
-          break;
-        case 'my-tasks':
-          tasksData = await api.getMyTasks(currentUser.id);
-          break;
-        default:
-          tasksData = await api.getTasks();
-      }
+      const tasksData = await api.getTasks(status, assignedUserId);
       
       // Sort tasks
       tasksData.sort((a, b) => {
@@ -53,7 +44,7 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
     } catch (error) {
       console.error('Error loading tasks:', error);
     }
-  }, [filter, sortBy, currentUser.id]);
+  }, [statusFilter, assigneeFilter, sortBy, currentUser.id]);
 
   useEffect(() => {
     async function loadData() {
@@ -147,39 +138,62 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
 
       <main className="max-w-7xl mx-auto px-4 py-6">
         {/* Controls */}
-        <div className="mb-6 flex flex-wrap gap-4 items-center justify-between">
-          <div className="flex gap-2">
-            <button
-              onClick={() => setFilter('open')}
-              className={`px-4 py-2 rounded ${filter === 'open' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border'}`}
-            >
-              Open
-            </button>
-            <button
-              onClick={() => setFilter('completed')}
-              className={`px-4 py-2 rounded ${filter === 'completed' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border'}`}
-            >
-              Completed
-            </button>
-            <button
-              onClick={() => setFilter('my-tasks')}
-              className={`px-4 py-2 rounded ${filter === 'my-tasks' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border'}`}
-            >
-              My Tasks
-            </button>
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 border'}`}
-            >
-              All
-            </button>
+        <div className="mb-6 flex flex-wrap gap-6 items-center justify-between">
+          <div className="flex flex-wrap gap-6">
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Status</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setStatusFilter('OPEN')}
+                  className={`px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === 'OPEN' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
+                >
+                  Open
+                </button>
+                <button
+                  onClick={() => setStatusFilter('IN_PROGRESS')}
+                  className={`px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === 'IN_PROGRESS' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
+                >
+                  In Progress
+                </button>
+                <button
+                  onClick={() => setStatusFilter('COMPLETED')}
+                  className={`px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === 'COMPLETED' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
+                >
+                  Completed
+                </button>
+                <button
+                  onClick={() => setStatusFilter('ALL')}
+                  className={`px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === 'ALL' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
+                >
+                  All
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Assignee</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setAssigneeFilter('MY_TASKS')}
+                  className={`px-3 py-1.5 text-sm rounded transition-colors ${assigneeFilter === 'MY_TASKS' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
+                >
+                  My Tasks
+                </button>
+                <button
+                  onClick={() => setAssigneeFilter('ALL')}
+                  className={`px-3 py-1.5 text-sm rounded transition-colors ${assigneeFilter === 'ALL' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
+                >
+                  All Tasks
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="flex gap-4 items-center">
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortType)}
-              className="px-3 py-2 border rounded bg-white"
+              className="px-3 py-2 border rounded bg-white text-sm"
             >
               <option value="createdAt">Sort by Created</option>
               <option value="dueDate">Sort by Due Date</option>
@@ -187,7 +201,7 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
 
             <button
               onClick={() => setShowForm(true)}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm font-medium"
             >
               + New Task
             </button>

@@ -49,6 +49,17 @@ class TaskControllerTest {
     }
 
     @Test
+    void getAllTasks_WithStatusAndUser_ReturnsFilteredList() {
+        when(taskService.getTasksByStatusAndAssignedUser(TaskStatus.OPEN, 1L)).thenReturn(List.of(testTask));
+
+        ResponseEntity<List<TaskDTO>> response = taskController.getAllTasks(TaskStatus.OPEN, 1L);
+
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        verify(taskService).getTasksByStatusAndAssignedUser(TaskStatus.OPEN, 1L);
+    }
+
+    @Test
     void getOpenTasks_ReturnsOpenTasks() {
         when(taskService.getOpenTasks()).thenReturn(List.of(testTask));
 

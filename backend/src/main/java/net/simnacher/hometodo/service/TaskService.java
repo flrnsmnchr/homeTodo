@@ -48,6 +48,13 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
+    public List<TaskDTO> getTasksByStatusAndAssignedUser(TaskStatus status, Long userId) {
+        return taskRepository.findByStatusAndAssignedUserId(status, userId).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
     public List<TaskDTO> getOpenTasks() {
         return getTasksByStatus(TaskStatus.OPEN);
     }
