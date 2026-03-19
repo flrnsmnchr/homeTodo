@@ -34,7 +34,7 @@ household
 
 ### Task Status
 
-Tasks can have the following statuses: - Open - In Progress - Completed
+Tasks can have the following statuses: - Open - Completed
 
 ------------------------------------------------------------------------
 

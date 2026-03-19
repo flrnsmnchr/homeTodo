@@ -1,4 +1,4 @@
-export type TaskStatus = 'OPEN' | 'IN_PROGRESS' | 'COMPLETED';
+export type TaskStatus = 'OPEN' | 'COMPLETED';
 
 export type RecurrenceType = 'DAILY' | 'WEEKLY' | 'MONTHLY';
 

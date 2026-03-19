@@ -4,7 +4,7 @@ import { api } from '../services/api';
 import { TaskList } from '../components/TaskList';
 import { TaskForm } from '../components/TaskForm';
 
-type StatusFilter = 'ALL' | 'OPEN' | 'IN_PROGRESS' | 'COMPLETED';
+type StatusFilter = 'ALL' | 'OPEN' | 'COMPLETED';
 type AssigneeFilter = 'ALL' | 'MY_TASKS';
 type SortType = 'createdAt' | 'dueDate';
 
@@ -150,18 +150,11 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
                   Open
                 </button>
                 <button
-                  onClick={() => setStatusFilter('IN_PROGRESS')}
-                  className={`px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === 'IN_PROGRESS' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
-                >
-                  In Progress
-                </button>
-                <button
                   onClick={() => setStatusFilter('COMPLETED')}
                   className={`px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === 'COMPLETED' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
                 >
                   Completed
-                </button>
-                <button
+                </button>                <button
                   onClick={() => setStatusFilter('ALL')}
                   className={`px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === 'ALL' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
                 >
