@@ -10324,23 +10324,14 @@ function Dashboard({ currentUser, onLogout }) {
 	const [tasks, setTasks] = (0, import_react.useState)([]);
 	const [loading, setLoading] = (0, import_react.useState)(true);
 	const [showForm, setShowForm] = (0, import_react.useState)(false);
-	const [filter, setFilter] = (0, import_react.useState)("open");
+	const [statusFilter, setStatusFilter] = (0, import_react.useState)("OPEN");
+	const [assigneeFilter, setAssigneeFilter] = (0, import_react.useState)("ALL");
 	const [sortBy, setSortBy] = (0, import_react.useState)("dueDate");
 	const loadTasks = (0, import_react.useCallback)(async () => {
 		try {
-			let tasksData;
-			switch (filter) {
-				case "open":
-					tasksData = await api.getOpenTasks();
-					break;
-				case "completed":
-					tasksData = await api.getCompletedTasks();
-					break;
-				case "my-tasks":
-					tasksData = await api.getMyTasks(currentUser.id);
-					break;
-				default: tasksData = await api.getTasks();
-			}
+			const status = statusFilter === "ALL" ? void 0 : statusFilter;
+			const assignedUserId = assigneeFilter === "MY_TASKS" ? currentUser.id : void 0;
+			const tasksData = await api.getTasks(status, assignedUserId);
 			tasksData.sort((a, b) => {
 				if (sortBy === "dueDate") {
 					if (!a.dueDate && !b.dueDate) return 0;
@@ -10355,7 +10346,8 @@ function Dashboard({ currentUser, onLogout }) {
 			console.error("Error loading tasks:", error);
 		}
 	}, [
-		filter,
+		statusFilter,
+		assigneeFilter,
 		sortBy,
 		currentUser.id
 	]);
@@ -10447,37 +10439,63 @@ function Dashboard({ currentUser, onLogout }) {
 			className: "max-w-7xl mx-auto px-4 py-6",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "mb-6 flex flex-wrap gap-4 items-center justify-between",
+					className: "mb-6 flex flex-wrap gap-6 items-center justify-between",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex gap-2",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: () => setFilter("open"),
-								className: `px-4 py-2 rounded ${filter === "open" ? "bg-blue-500 text-white" : "bg-white text-gray-700 border"}`,
-								children: "Open"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: () => setFilter("completed"),
-								className: `px-4 py-2 rounded ${filter === "completed" ? "bg-blue-500 text-white" : "bg-white text-gray-700 border"}`,
-								children: "Completed"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: () => setFilter("my-tasks"),
-								className: `px-4 py-2 rounded ${filter === "my-tasks" ? "bg-blue-500 text-white" : "bg-white text-gray-700 border"}`,
-								children: "My Tasks"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: () => setFilter("all"),
-								className: `px-4 py-2 rounded ${filter === "all" ? "bg-blue-500 text-white" : "bg-white text-gray-700 border"}`,
-								children: "All"
-							})
-						]
+						className: "flex flex-wrap gap-6",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-col gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-sm font-semibold text-gray-500 uppercase tracking-wider",
+								children: "Status"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex gap-2",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										onClick: () => setStatusFilter("OPEN"),
+										className: `px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === "OPEN" ? "bg-blue-600 text-white" : "bg-white text-gray-700 border hover:bg-gray-50"}`,
+										children: "Open"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										onClick: () => setStatusFilter("IN_PROGRESS"),
+										className: `px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === "IN_PROGRESS" ? "bg-blue-600 text-white" : "bg-white text-gray-700 border hover:bg-gray-50"}`,
+										children: "In Progress"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										onClick: () => setStatusFilter("COMPLETED"),
+										className: `px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === "COMPLETED" ? "bg-blue-600 text-white" : "bg-white text-gray-700 border hover:bg-gray-50"}`,
+										children: "Completed"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										onClick: () => setStatusFilter("ALL"),
+										className: `px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === "ALL" ? "bg-blue-600 text-white" : "bg-white text-gray-700 border hover:bg-gray-50"}`,
+										children: "All"
+									})
+								]
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex flex-col gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-sm font-semibold text-gray-500 uppercase tracking-wider",
+								children: "Assignee"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									onClick: () => setAssigneeFilter("MY_TASKS"),
+									className: `px-3 py-1.5 text-sm rounded transition-colors ${assigneeFilter === "MY_TASKS" ? "bg-blue-600 text-white" : "bg-white text-gray-700 border hover:bg-gray-50"}`,
+									children: "My Tasks"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									onClick: () => setAssigneeFilter("ALL"),
+									className: `px-3 py-1.5 text-sm rounded transition-colors ${assigneeFilter === "ALL" ? "bg-blue-600 text-white" : "bg-white text-gray-700 border hover:bg-gray-50"}`,
+									children: "All Tasks"
+								})]
+							})]
+						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex gap-4 items-center",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
 							value: sortBy,
 							onChange: (e) => setSortBy(e.target.value),
-							className: "px-3 py-2 border rounded bg-white",
+							className: "px-3 py-2 border rounded bg-white text-sm",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 								value: "createdAt",
 								children: "Sort by Created"
@@ -10487,7 +10505,7 @@ function Dashboard({ currentUser, onLogout }) {
 							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							onClick: () => setShowForm(true),
-							className: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
+							className: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm font-medium",
 							children: "+ New Task"
 						})]
 					})]
