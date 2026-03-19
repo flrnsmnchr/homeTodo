@@ -10456,15 +10456,11 @@ function Dashboard({ currentUser, onLogout }) {
 										children: "Open"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										onClick: () => setStatusFilter("IN_PROGRESS"),
-										className: `px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === "IN_PROGRESS" ? "bg-blue-600 text-white" : "bg-white text-gray-700 border hover:bg-gray-50"}`,
-										children: "In Progress"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										onClick: () => setStatusFilter("COMPLETED"),
 										className: `px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === "COMPLETED" ? "bg-blue-600 text-white" : "bg-white text-gray-700 border hover:bg-gray-50"}`,
 										children: "Completed"
 									}),
+									"                ",
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										onClick: () => setStatusFilter("ALL"),
 										className: `px-3 py-1.5 text-sm rounded transition-colors ${statusFilter === "ALL" ? "bg-blue-600 text-white" : "bg-white text-gray-700 border hover:bg-gray-50"}`,
