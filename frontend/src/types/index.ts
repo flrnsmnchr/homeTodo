@@ -31,11 +31,11 @@ export interface CreateTaskRequest {
 
 export interface UpdateTaskRequest {
   title?: string;
-  description?: string;
+  description?: string | null;
   status?: TaskStatus;
-  dueDate?: string;
-  assignedUserId?: number;
-  recurrence?: RecurrenceType;
+  dueDate?: string | null;
+  assignedUserId?: number | null;
+  recurrence?: RecurrenceType | null;
 }
 
 export interface ActivityLog {

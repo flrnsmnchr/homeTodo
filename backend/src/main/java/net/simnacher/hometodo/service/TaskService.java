@@ -101,22 +101,22 @@ public class TaskService {
         if (request.getTitle() != null) {
             task.setTitle(request.getTitle());
         }
-        if (request.getDescription() != null) {
-            task.setDescription(request.getDescription());
-        }
+        
+        // Optional fields can be cleared (set to null)
+        task.setDescription(request.getDescription());
+        task.setDueDate(request.getDueDate());
+        task.setRecurrence(request.getRecurrence());
+
         if (request.getStatus() != null) {
             task.setStatus(request.getStatus());
         }
-        if (request.getDueDate() != null) {
-            task.setDueDate(request.getDueDate());
-        }
+
         if (request.getAssignedUserId() != null) {
             User assignedUser = userRepository.findById(request.getAssignedUserId())
                     .orElseThrow(() -> new RuntimeException("Assigned user not found"));
             task.setAssignedUser(assignedUser);
-        }
-        if (request.getRecurrence() != null) {
-            task.setRecurrence(request.getRecurrence());
+        } else {
+            task.setAssignedUser(null);
         }
 
         Task saved = taskRepository.save(task);

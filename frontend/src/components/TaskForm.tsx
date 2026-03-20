@@ -21,10 +21,10 @@ export function TaskForm({ task, users, onSubmit, onCancel }: TaskFormProps) {
     if (task) {
       const request: UpdateTaskRequest = {
         title,
-        description: description || undefined,
-        dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
-        assignedUserId,
-        recurrence,
+        description: description || null,
+        dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+        assignedUserId: assignedUserId ?? null,
+        recurrence: recurrence || null,
       };
       onSubmit(request);
     } else {
@@ -33,7 +33,7 @@ export function TaskForm({ task, users, onSubmit, onCancel }: TaskFormProps) {
         description: description || undefined,
         dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
         assignedUserId,
-        recurrence,
+        recurrence: recurrence || undefined,
       };
       onSubmit(request);
     }
@@ -93,7 +93,7 @@ export function TaskForm({ task, users, onSubmit, onCancel }: TaskFormProps) {
           <label className="block text-sm font-medium text-gray-700 mb-1">Recurrence</label>
           <select
             value={recurrence ?? ''}
-            onChange={(e) => setRecurrence(e.target.value as RecurrenceType | undefined)}
+            onChange={(e) => setRecurrence(e.target.value ? (e.target.value as RecurrenceType) : undefined)}
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">None</option>
