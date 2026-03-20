@@ -31,13 +31,13 @@ describe('LoginPage', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (api.getUsers as any).mockResolvedValue(mockUsers);
-    (api.getHistory as any).mockResolvedValue(mockHistory);
+    vi.mocked(api.getUsers).mockResolvedValue(mockUsers);
+    vi.mocked(api.getHistory).mockResolvedValue(mockHistory);
   });
 
   it('renders loading state initially', () => {
-    (api.getUsers as any).mockReturnValue(new Promise(() => {}));
-    (api.getHistory as any).mockReturnValue(new Promise(() => {}));
+    vi.mocked(api.getUsers).mockReturnValue(new Promise(() => {}));
+    vi.mocked(api.getHistory).mockReturnValue(new Promise(() => {}));
     const { asFragment } = render(<LoginPage onLogin={vi.fn()} />);
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
     expect(asFragment()).toMatchSnapshot();

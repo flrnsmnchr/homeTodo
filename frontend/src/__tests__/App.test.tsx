@@ -15,9 +15,9 @@ vi.mock('../services/api', () => ({
 describe('App', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (api.getUsers as any).mockResolvedValue([{ id: 1, name: 'Test User' }]);
-    (api.getHistory as any).mockResolvedValue([]);
-    (api.getTasks as any).mockResolvedValue([]);
+    vi.mocked(api.getUsers).mockResolvedValue([{ id: 1, name: 'Test User' }]);
+    vi.mocked(api.getHistory).mockResolvedValue([]);
+    vi.mocked(api.getTasks).mockResolvedValue([]);
   });
 
   it('renders login page initially (snapshot)', async () => {

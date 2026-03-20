@@ -41,13 +41,13 @@ describe('Dashboard', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (api.getUsers as any).mockResolvedValue(mockUsers);
-    (api.getTasks as any).mockResolvedValue(mockTasks);
+    vi.mocked(api.getUsers).mockResolvedValue(mockUsers);
+    vi.mocked(api.getTasks).mockResolvedValue(mockTasks);
   });
 
   it('renders loading state initially', () => {
-    (api.getUsers as any).mockReturnValue(new Promise(() => {}));
-    (api.getTasks as any).mockReturnValue(new Promise(() => {}));
+    vi.mocked(api.getUsers).mockReturnValue(new Promise(() => {}));
+    vi.mocked(api.getTasks).mockReturnValue(new Promise(() => {}));
     const { asFragment } = render(<Dashboard currentUser={mockUser} onLogout={vi.fn()} />);
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
     expect(asFragment()).toMatchSnapshot();
@@ -63,7 +63,7 @@ describe('Dashboard', () => {
   });
 
   it('renders empty dashboard correctly (snapshot)', async () => {
-    (api.getTasks as any).mockResolvedValue([]);
+    vi.mocked(api.getTasks).mockResolvedValue([]);
     const { asFragment } = render(<Dashboard currentUser={mockUser} onLogout={vi.fn()} />);
     
     await waitFor(() => expect(screen.queryByText(/loading/i)).not.toBeInTheDocument());

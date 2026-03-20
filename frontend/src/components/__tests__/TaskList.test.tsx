@@ -40,7 +40,7 @@ describe('TaskList', () => {
     onComplete: vi.fn(),
     onUncomplete: vi.fn(),
     onDelete: vi.fn(),
-    onUpdate: vi.fn(async (_id, _req) => {})
+    onUpdate: vi.fn(async () => {})
   };
 
   it('renders correctly (snapshot)', () => {

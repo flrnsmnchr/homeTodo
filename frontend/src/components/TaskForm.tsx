@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { Task, User, CreateTaskRequest, UpdateTaskRequest, RecurrenceType } from '../types';
 
 interface TaskFormProps {
@@ -9,27 +9,11 @@ interface TaskFormProps {
 }
 
 export function TaskForm({ task, users, onSubmit, onCancel }: TaskFormProps) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [dueDate, setDueDate] = useState('');
-  const [assignedUserId, setAssignedUserId] = useState<number | undefined>(undefined);
-  const [recurrence, setRecurrence] = useState<RecurrenceType | undefined>(undefined);
-
-  useEffect(() => {
-    if (task) {
-      setTitle(task.title);
-      setDescription(task.description || '');
-      setDueDate(task.dueDate ? task.dueDate.slice(0, 16) : '');
-      setAssignedUserId(task.assignedUserId || undefined);
-      setRecurrence(task.recurrence || undefined);
-    } else {
-      setTitle('');
-      setDescription('');
-      setDueDate('');
-      setAssignedUserId(undefined);
-      setRecurrence(undefined);
-    }
-  }, [task]);
+  const [title, setTitle] = useState(task?.title || '');
+  const [description, setDescription] = useState(task?.description || '');
+  const [dueDate, setDueDate] = useState(task?.dueDate ? task.dueDate.slice(0, 16) : '');
+  const [assignedUserId, setAssignedUserId] = useState<number | undefined>(task?.assignedUserId || undefined);
+  const [recurrence, setRecurrence] = useState<RecurrenceType | undefined>(task?.recurrence || undefined);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
