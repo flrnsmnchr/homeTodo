@@ -7,3 +7,4 @@ backend/bin
 backend/.classpath
 backend/hometodo.db
 backend/hometodo.log
+.idea
