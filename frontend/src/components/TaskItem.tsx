@@ -38,8 +38,9 @@ export function TaskItem({ task, currentUserId, onComplete, onUncomplete, onDele
               </span>
             )}
             {task.dueDate && (
-              <span>Due: {formatDate(task.dueDate)} <span className="text-gray-400 ml-1">(#{task.id})</span></span>
+              <span>Due: {formatDate(task.dueDate)}</span>
             )}
+            <span className="text-gray-400 ml-1">(#{task.id})</span>
             {task.recurrence && (
               <span className="text-purple-600">🔄 {task.recurrence.toLowerCase()}</span>
             )}
