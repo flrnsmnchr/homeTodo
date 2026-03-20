@@ -10118,6 +10118,14 @@ function TaskItem({ task, currentUserId, onComplete, onUncomplete, onDelete, onE
 							children: task.assignedUserName
 						}),
 						task.dueDate && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["Due: ", formatDate(task.dueDate)] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "text-gray-400 ml-1",
+							children: [
+								"(#",
+								task.id,
+								")"
+							]
+						}),
 						task.recurrence && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "text-purple-600",
 							children: ["🔄 ", task.recurrence.toLowerCase()]
@@ -10154,41 +10162,26 @@ function TaskItem({ task, currentUserId, onComplete, onUncomplete, onDelete, onE
 //#endregion
 //#region src/components/TaskForm.tsx
 function TaskForm({ task, users, onSubmit, onCancel }) {
-	const [title, setTitle] = (0, import_react.useState)("");
-	const [description, setDescription] = (0, import_react.useState)("");
-	const [dueDate, setDueDate] = (0, import_react.useState)("");
-	const [assignedUserId, setAssignedUserId] = (0, import_react.useState)(void 0);
-	const [recurrence, setRecurrence] = (0, import_react.useState)(void 0);
-	(0, import_react.useEffect)(() => {
-		if (task) {
-			setTitle(task.title);
-			setDescription(task.description || "");
-			setDueDate(task.dueDate ? task.dueDate.slice(0, 16) : "");
-			setAssignedUserId(task.assignedUserId || void 0);
-			setRecurrence(task.recurrence || void 0);
-		} else {
-			setTitle("");
-			setDescription("");
-			setDueDate("");
-			setAssignedUserId(void 0);
-			setRecurrence(void 0);
-		}
-	}, [task]);
+	const [title, setTitle] = (0, import_react.useState)(task?.title || "");
+	const [description, setDescription] = (0, import_react.useState)(task?.description || "");
+	const [dueDate, setDueDate] = (0, import_react.useState)(task?.dueDate ? task.dueDate.slice(0, 16) : "");
+	const [assignedUserId, setAssignedUserId] = (0, import_react.useState)(task?.assignedUserId || void 0);
+	const [recurrence, setRecurrence] = (0, import_react.useState)(task?.recurrence || void 0);
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (task) onSubmit({
 			title,
-			description: description || void 0,
-			dueDate: dueDate ? new Date(dueDate).toISOString() : void 0,
-			assignedUserId,
-			recurrence
+			description: description || null,
+			dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+			assignedUserId: assignedUserId ?? null,
+			recurrence: recurrence || null
 		});
 		else onSubmit({
 			title,
 			description: description || void 0,
 			dueDate: dueDate ? new Date(dueDate).toISOString() : void 0,
 			assignedUserId,
-			recurrence
+			recurrence: recurrence || void 0
 		});
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("form", {
@@ -10247,7 +10240,7 @@ function TaskForm({ task, users, onSubmit, onCancel }) {
 					children: "Recurrence"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
 					value: recurrence ?? "",
-					onChange: (e) => setRecurrence(e.target.value),
+					onChange: (e) => setRecurrence(e.target.value ? e.target.value : void 0),
 					className: "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
@@ -10339,6 +10332,7 @@ function Dashboard({ currentUser, onLogout }) {
 					if (!b.dueDate) return -1;
 					return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
 				}
+				if (sortBy === "title") return a.title.localeCompare(b.title);
 				return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 			});
 			setTasks(tasksData);
@@ -10492,13 +10486,20 @@ function Dashboard({ currentUser, onLogout }) {
 							value: sortBy,
 							onChange: (e) => setSortBy(e.target.value),
 							className: "px-3 py-2 border rounded bg-white text-sm",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-								value: "createdAt",
-								children: "Sort by Created"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-								value: "dueDate",
-								children: "Sort by Due Date"
-							})]
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+									value: "createdAt",
+									children: "Sort by Created"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+									value: "dueDate",
+									children: "Sort by Due Date"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+									value: "title",
+									children: "Sort by Title"
+								})
+							]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							onClick: () => setShowForm(true),
 							className: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm font-medium",
