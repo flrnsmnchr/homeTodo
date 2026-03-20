@@ -3,10 +3,16 @@ $taskName = "HomeTodo"
 $dest = "C:\Users\Florian Simnacher\Dateien\Development\homeTodo"
 $jarFile = "C:\dev\src\homeTodo\backend\build\libs\hometodo-0.0.1-SNAPSHOT.jar"
 
-
 Stop-ScheduledTask -TaskName $taskName
 
 Start-Sleep -Seconds 3
+
+Remove-Item .\build\libs\hometodo-0.0.1-SNAPSHOT.jar
+
+cd ..\frontend
+npm run build
+cd ..\backend
+.\gradlew build
 
 # Create timestamped temp folder inside destination
 $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"

@@ -6,7 +6,7 @@ import { TaskForm } from '../components/TaskForm';
 
 type StatusFilter = 'ALL' | 'OPEN' | 'COMPLETED';
 type AssigneeFilter = 'ALL' | 'MY_TASKS';
-type SortType = 'createdAt' | 'dueDate';
+type SortType = 'createdAt' | 'dueDate' | 'title';
 
 interface DashboardProps {
   currentUser: User;
@@ -36,6 +36,9 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
           if (!a.dueDate) return 1;
           if (!b.dueDate) return -1;
           return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+        }
+        if (sortBy === 'title') {
+          return a.title.localeCompare(b.title);
         }
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
@@ -190,6 +193,7 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
             >
               <option value="createdAt">Sort by Created</option>
               <option value="dueDate">Sort by Due Date</option>
+              <option value="title">Sort by Title</option>
             </select>
 
             <button

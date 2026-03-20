@@ -7,10 +7,6 @@ const root = path.dirname(fileURLToPath(new URL('.', import.meta.url)))
 const distDir = path.join(root, 'dist')
 const targetDir = path.join(root, '..', 'backend', 'src', 'main', 'resources', 'static')
 
-console.log('frontend root:', root)
-console.log('dist dir:', distDir)
-console.log('target dir:', targetDir)
-
 async function copyDist() {
   try {
     // Remove existing target folder to avoid stale files
