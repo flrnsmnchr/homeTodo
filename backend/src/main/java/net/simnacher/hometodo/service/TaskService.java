@@ -140,6 +140,10 @@ public class TaskService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if (task.getAssignedUser() == null || !task.getAssignedUser().getId().equals(userId)) {
+            task.setAssignedUser(user);
+        }
+
         task.setStatus(TaskStatus.COMPLETED);
         Task saved = taskRepository.save(task);
 

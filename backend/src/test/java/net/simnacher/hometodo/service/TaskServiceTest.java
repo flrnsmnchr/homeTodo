@@ -64,6 +64,23 @@ class TaskServiceTest {
     }
 
     @Test
+    void completeTask_NotAssigned_AssignsAutomatically() {
+        User otherUser = new User("Other User");
+        otherUser.setId(2L);
+        testTask.setAssignedUser(otherUser);
+        testTask.setStatus(TaskStatus.OPEN);
+
+        when(taskRepository.findById(100L)).thenReturn(Optional.of(testTask));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+        when(taskRepository.save(any(Task.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        TaskDTO result = taskService.completeTask(100L, 1L);
+
+        assertEquals(TaskStatus.COMPLETED, result.getStatus());
+        assertEquals(1L, result.getAssignedUserId()); // testUser.id
+    }
+
+    @Test
     void completeTask_Success() {
         testTask.setStatus(TaskStatus.OPEN);
         when(taskRepository.findById(100L)).thenReturn(Optional.of(testTask));

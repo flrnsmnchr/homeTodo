@@ -1,4 +1,4 @@
-import type { User, Task, CreateTaskRequest, UpdateTaskRequest, ActivityLog, TaskStatus } from '../types';
+import type { User, Task, CreateTaskRequest, UpdateTaskRequest, ActivityLog, TaskStatus, UserStatistics } from '../types';
 
 const API_BASE = '/api';
 
@@ -27,6 +27,7 @@ export const api = {
   // Users
   getUsers: () => request<User[]>(`${API_BASE}/users`),
   getUser: (id: number) => request<User>(`${API_BASE}/users/${id}`),
+  getUserStatistics: () => request<UserStatistics[]>(`${API_BASE}/users/statistics`),
 
   // Tasks
   getTasks: (status?: TaskStatus, assignedUserId?: number) => {

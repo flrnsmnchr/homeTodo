@@ -38,6 +38,14 @@ export interface UpdateTaskRequest {
   recurrence?: RecurrenceType | null;
 }
 
+export interface UserStatistics {
+  userId: number;
+  userName: string;
+  totalTasks: number;
+  openTasks: number;
+  completedTasks: number;
+}
+
 export interface ActivityLog {
   id: number;
   taskId: number;

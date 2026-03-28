@@ -1,6 +1,7 @@
 package net.simnacher.hometodo.controller;
 
 import net.simnacher.hometodo.dto.UserDTO;
+import net.simnacher.hometodo.dto.UserStatisticsDTO;
 import net.simnacher.hometodo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,14 @@ public class UserController {
         List<UserDTO> users = userService.getAllUsers();
         logger.debug("Exiting getAllUsers() with {} users", users.size());
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<List<UserStatisticsDTO>> getUserStatistics() {
+        logger.debug("Entering getUserStatistics()");
+        List<UserStatisticsDTO> stats = userService.getUserStatistics();
+        logger.debug("Exiting getUserStatistics() with {} stats", stats.size());
+        return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/{id}")
