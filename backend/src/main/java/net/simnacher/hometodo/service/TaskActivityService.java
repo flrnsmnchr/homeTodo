@@ -3,6 +3,7 @@ package net.simnacher.hometodo.service;
 import net.simnacher.hometodo.model.Task;
 import net.simnacher.hometodo.model.User;
 import net.simnacher.hometodo.repository.TaskActivityRepository;
+import net.simnacher.hometodo.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +16,11 @@ import java.util.Map;
 public class TaskActivityService {
 
     private final TaskActivityRepository activityRepository;
+    private final TaskRepository taskRepository;
 
-    public TaskActivityService(TaskActivityRepository activityRepository) {
+    public TaskActivityService(TaskActivityRepository activityRepository, TaskRepository taskRepository) {
         this.activityRepository = activityRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Transactional
@@ -39,6 +42,7 @@ public class TaskActivityService {
                     Map<String, Object> map = new HashMap<>();
                     map.put("id", log.getId());
                     map.put("taskId", log.getTaskId());
+                    map.put("taskTitle", taskRepository.findById(log.getTaskId()).map(Task::getTitle).orElse("Deleted Task"));
                     map.put("action", log.getAction());
                     map.put("userId", log.getUser() != null ? log.getUser().getId() : null);
                     map.put("userName", log.getUser() != null ? log.getUser().getName() : null);
@@ -56,6 +60,7 @@ public class TaskActivityService {
                     Map<String, Object> map = new HashMap<>();
                     map.put("id", log.getId());
                     map.put("taskId", log.getTaskId());
+                    map.put("taskTitle", taskRepository.findById(log.getTaskId()).map(Task::getTitle).orElse("Deleted Task"));
                     map.put("action", log.getAction());
                     map.put("userId", log.getUser() != null ? log.getUser().getId() : null);
                     map.put("userName", log.getUser() != null ? log.getUser().getName() : null);

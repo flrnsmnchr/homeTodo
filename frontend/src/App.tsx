@@ -3,10 +3,11 @@ import type { User } from './types';
 import { LoginPage } from './pages/LoginPage';
 import { Dashboard } from './pages/Dashboard';
 import { Statistics } from './pages/Statistics';
+import { Timeline } from './pages/Timeline';
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [view, setView] = useState<'dashboard' | 'statistics'>('dashboard');
+  const [view, setView] = useState<'dashboard' | 'statistics' | 'timeline'>('dashboard');
 
   if (!currentUser) {
     return <LoginPage onLogin={setCurrentUser} />;
@@ -33,12 +34,20 @@ function App() {
           >
             Statistics
           </button>
+          <button
+            onClick={() => setView('timeline')}
+            className={`px-3 py-1 text-sm font-medium rounded ${view === 'timeline' ? 'bg-blue-100 text-blue-800' : 'text-gray-600 hover:text-gray-800'}`}
+          >
+            Timeline
+          </button>
         </div>
       </div>
       {view === 'dashboard' ? (
         <Dashboard currentUser={currentUser} onLogout={handleLogout} />
-      ) : (
+      ) : view === 'statistics' ? (
         <Statistics />
+      ) : (
+        <Timeline />
       )}
     </div>
   );

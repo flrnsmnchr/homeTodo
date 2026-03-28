@@ -49,6 +49,7 @@ export interface UserStatistics {
 export interface ActivityLog {
   id: number;
   taskId: number;
+  taskTitle?: string;
   action: string;
   userId: number | null;
   userName: string | null;
