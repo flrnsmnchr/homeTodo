@@ -12,7 +12,7 @@ Remove-Item .\build\libs\hometodo-0.0.1-SNAPSHOT.jar
 cd ..\frontend
 npm run build
 cd ..\backend
-.\gradlew build
+.\gradlew clean build
 
 # Create timestamped temp folder inside destination
 $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"

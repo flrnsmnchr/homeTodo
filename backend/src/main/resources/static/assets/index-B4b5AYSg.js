@@ -9911,6 +9911,7 @@ async function request(url, options) {
 var api = {
 	getUsers: () => request(`${API_BASE}/users`),
 	getUser: (id) => request(`${API_BASE}/users/${id}`),
+	getUserStatistics: () => request(`${API_BASE}/users/statistics`),
 	getTasks: (status, assignedUserId) => {
 		let url = `${API_BASE}/tasks`;
 		const params = new URLSearchParams();
@@ -10529,14 +10530,229 @@ function Dashboard({ currentUser, onLogout }) {
 	});
 }
 //#endregion
+//#region src/pages/Statistics.tsx
+function Statistics() {
+	const [stats, setStats] = (0, import_react.useState)([]);
+	const [loading, setLoading] = (0, import_react.useState)(true);
+	(0, import_react.useEffect)(() => {
+		async function loadStats() {
+			try {
+				setStats(await api.getUserStatistics());
+			} catch (error) {
+				console.error("Error loading statistics:", error);
+			} finally {
+				setLoading(false);
+			}
+		}
+		loadStats();
+	}, []);
+	if (loading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "min-h-screen flex items-center justify-center bg-gray-100",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "text-gray-600",
+			children: "Loading statistics..."
+		})
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "min-h-screen bg-gray-100 p-6",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "max-w-4xl mx-auto",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mb-8",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-2xl font-bold text-gray-800",
+					children: "Task Overview"
+				})
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "grid gap-6 md:grid-cols-2",
+				children: stats.map((user) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "bg-white p-6 rounded-lg shadow-sm border border-gray-200",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+							className: "text-xl font-semibold text-gray-800 mb-4",
+							children: user.userName
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-3 gap-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-center",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "text-2xl font-bold text-blue-600",
+										children: user.totalTasks
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "text-xs text-gray-500 uppercase",
+										children: "Total"
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-center",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "text-2xl font-bold text-yellow-600",
+										children: user.openTasks
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "text-xs text-gray-500 uppercase",
+										children: "Open"
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-center",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "text-2xl font-bold text-green-600",
+										children: user.completedTasks
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "text-xs text-gray-500 uppercase",
+										children: "Done"
+									})]
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "mt-4 w-full bg-gray-200 rounded-full h-2",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "bg-green-500 h-2 rounded-full",
+								style: { width: `${user.totalTasks > 0 ? user.completedTasks / user.totalTasks * 100 : 0}%` }
+							})
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "mt-2 text-right text-xs text-gray-400",
+							children: [user.totalTasks > 0 ? Math.round(user.completedTasks / user.totalTasks * 100) : 0, "% Completion"]
+						})
+					]
+				}, user.userId))
+			})]
+		})
+	});
+}
+//#endregion
+//#region src/pages/Timeline.tsx
+function Timeline() {
+	const [history, setHistory] = (0, import_react.useState)([]);
+	const [loading, setLoading] = (0, import_react.useState)(true);
+	(0, import_react.useEffect)(() => {
+		async function loadHistory() {
+			try {
+				setHistory(await api.getHistory());
+			} catch (error) {
+				console.error("Error loading history:", error);
+			} finally {
+				setLoading(false);
+			}
+		}
+		loadHistory();
+	}, []);
+	const formatDate = (dateStr) => {
+		return new Date(dateStr).toLocaleString();
+	};
+	const getActionColor = (action) => {
+		switch (action.toUpperCase()) {
+			case "CREATED": return "text-green-600";
+			case "COMPLETED": return "text-blue-600";
+			case "UNCOMPLETED": return "text-yellow-600";
+			case "UPDATED": return "text-purple-600";
+			default: return "text-gray-600";
+		}
+	};
+	if (loading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "min-h-screen flex items-center justify-center bg-gray-100",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "text-gray-600",
+			children: "Loading timeline..."
+		})
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "min-h-screen bg-gray-100 p-6",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "max-w-4xl mx-auto",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mb-8",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-2xl font-bold text-gray-800",
+					children: "Recent Activity"
+				})
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "bg-white rounded-lg shadow overflow-hidden",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "divide-y divide-gray-200",
+					children: history.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "p-8 text-center text-gray-500",
+						children: "No activity recorded yet."
+					}) : history.map((log) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "p-4 hover:bg-gray-50 transition-colors",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex justify-between items-start",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "font-medium text-gray-900",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-bold",
+										children: log.userName || "System"
+									}),
+									" ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: getActionColor(log.action),
+										children: log.action.toLowerCase()
+									}),
+									" task: ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "italic",
+										children: [
+											"\"",
+											log.taskTitle || `Task #${log.taskId}`,
+											"\""
+										]
+									})
+								]
+							}), log.details && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm text-gray-600 mt-1",
+								children: log.details
+							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-xs text-gray-400 whitespace-nowrap ml-4",
+								children: formatDate(log.timestamp)
+							})]
+						})
+					}, log.id))
+				})
+			})]
+		})
+	});
+}
+//#endregion
 //#region src/App.tsx
 function App() {
 	const [currentUser, setCurrentUser] = (0, import_react.useState)(null);
+	const [view, setView] = (0, import_react.useState)("dashboard");
 	if (!currentUser) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoginPage, { onLogin: setCurrentUser });
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dashboard, {
+	const handleLogout = () => {
+		setCurrentUser(null);
+		setView("dashboard");
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "bg-white border-b border-gray-200",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "max-w-7xl mx-auto px-4 py-2 flex justify-end gap-4",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					onClick: () => setView("dashboard"),
+					className: `px-3 py-1 text-sm font-medium rounded ${view === "dashboard" ? "bg-blue-100 text-blue-800" : "text-gray-600 hover:text-gray-800"}`,
+					children: "Dashboard"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					onClick: () => setView("statistics"),
+					className: `px-3 py-1 text-sm font-medium rounded ${view === "statistics" ? "bg-blue-100 text-blue-800" : "text-gray-600 hover:text-gray-800"}`,
+					children: "Statistics"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					onClick: () => setView("timeline"),
+					className: `px-3 py-1 text-sm font-medium rounded ${view === "timeline" ? "bg-blue-100 text-blue-800" : "text-gray-600 hover:text-gray-800"}`,
+					children: "Timeline"
+				})
+			]
+		})
+	}), view === "dashboard" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dashboard, {
 		currentUser,
-		onLogout: () => setCurrentUser(null)
-	});
+		onLogout: handleLogout
+	}) : view === "statistics" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Statistics, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Timeline, {})] });
 }
 //#endregion
 //#region src/main.tsx
