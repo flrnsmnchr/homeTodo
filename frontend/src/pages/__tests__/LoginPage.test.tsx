@@ -25,7 +25,8 @@ describe('LoginPage', () => {
       userId: 1,
       userName: 'User 1',
       timestamp: '2025-01-01T10:00:00Z',
-      details: 'Created task 1'
+      details: 'Created task 1',
+      kudosCount: 0
     }
   ];
 

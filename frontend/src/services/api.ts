@@ -1,4 +1,4 @@
-import type { User, Task, CreateTaskRequest, UpdateTaskRequest, ActivityLog, TaskStatus, UserStatistics } from '../types';
+import type { User, Task, CreateTaskRequest, UpdateTaskRequest, ActivityLog, TaskStatus, UserStatistics, Kudo } from '../types';
 
 const API_BASE = '/api';
 
@@ -68,4 +68,14 @@ export const api = {
   // History
   getHistory: () => request<ActivityLog[]>(`${API_BASE}/history`),
   getTaskHistory: (taskId: number) => request<ActivityLog[]>(`${API_BASE}/history/task/${taskId}`),
+
+  // Kudos
+  giveKudo: (activityId: number, userId: number) =>
+    request<void>(`${API_BASE}/kudos/${activityId}?userId=${userId}`, { method: 'POST' }),
+  
+  getUnseenKudos: (userId: number) =>
+    request<Kudo[]>(`${API_BASE}/kudos/unseen?userId=${userId}`),
+  
+  markKudosSeen: (userId: number) =>
+    request<void>(`${API_BASE}/kudos/mark-seen?userId=${userId}`, { method: 'POST' }),
 };

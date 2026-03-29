@@ -2,6 +2,7 @@ package net.simnacher.hometodo.service;
 
 import net.simnacher.hometodo.model.Task;
 import net.simnacher.hometodo.model.User;
+import net.simnacher.hometodo.repository.KudosRepository;
 import net.simnacher.hometodo.repository.TaskActivityRepository;
 import net.simnacher.hometodo.repository.TaskRepository;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,14 @@ public class TaskActivityService {
 
     private final TaskActivityRepository activityRepository;
     private final TaskRepository taskRepository;
+    private final KudosRepository kudosRepository;
 
-    public TaskActivityService(TaskActivityRepository activityRepository, TaskRepository taskRepository) {
+    public TaskActivityService(TaskActivityRepository activityRepository, 
+                               TaskRepository taskRepository,
+                               KudosRepository kudosRepository) {
         this.activityRepository = activityRepository;
         this.taskRepository = taskRepository;
+        this.kudosRepository = kudosRepository;
     }
 
     @Transactional
@@ -48,6 +53,7 @@ public class TaskActivityService {
                     map.put("userName", log.getUser() != null ? log.getUser().getName() : null);
                     map.put("timestamp", log.getTimestamp());
                     map.put("details", log.getDetails());
+                    map.put("kudosCount", kudosRepository.countByActivityId(log.getId()));
                     return map;
                 })
                 .toList();
@@ -66,6 +72,7 @@ public class TaskActivityService {
                     map.put("userName", log.getUser() != null ? log.getUser().getName() : null);
                     map.put("timestamp", log.getTimestamp());
                     map.put("details", log.getDetails());
+                    map.put("kudosCount", kudosRepository.countByActivityId(log.getId()));
                     return map;
                 })
                 .toList();

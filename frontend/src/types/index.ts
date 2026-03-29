@@ -55,4 +55,13 @@ export interface ActivityLog {
   userName: string | null;
   timestamp: string;
   details: string | null;
+  kudosCount: number;
+}
+
+export interface Kudo {
+  id: number;
+  activityId: number;
+  taskTitle: string;
+  giverName: string;
+  createdAt: string;
 }

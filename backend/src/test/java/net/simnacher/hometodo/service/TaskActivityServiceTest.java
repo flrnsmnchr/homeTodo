@@ -3,6 +3,7 @@ package net.simnacher.hometodo.service;
 import net.simnacher.hometodo.model.Task;
 import net.simnacher.hometodo.model.TaskActivityLog;
 import net.simnacher.hometodo.model.User;
+import net.simnacher.hometodo.repository.KudosRepository;
 import net.simnacher.hometodo.repository.TaskActivityRepository;
 import net.simnacher.hometodo.repository.TaskRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,9 @@ class TaskActivityServiceTest {
 
     @Mock
     private TaskRepository taskRepository;
+
+    @Mock
+    private KudosRepository kudosRepository;
 
     @InjectMocks
     private TaskActivityService taskActivityService;

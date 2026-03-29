@@ -2,23 +2,37 @@ import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import type { ActivityLog } from '../types';
 
-export function Timeline() {
+interface TimelineProps {
+  currentUserId: number;
+}
+
+export function Timeline({ currentUserId }: TimelineProps) {
   const [history, setHistory] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function loadHistory() {
-      try {
-        const data = await api.getHistory();
-        setHistory(data);
-      } catch (error) {
-        console.error('Error loading history:', error);
-      } finally {
-        setLoading(false);
-      }
+  const loadHistory = async () => {
+    try {
+      const data = await api.getHistory();
+      setHistory(data);
+    } catch (error) {
+      console.error('Error loading history:', error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     loadHistory();
   }, []);
+
+  const handleGiveKudo = async (activityId: number) => {
+    try {
+      await api.giveKudo(activityId, currentUserId);
+      await loadHistory();
+    } catch (error) {
+      console.error('Error giving kudo:', error);
+    }
+  };
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -58,7 +72,7 @@ export function Timeline() {
               history.map((log) => (
                 <div key={log.id} className="p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex justify-between items-start">
-                    <div>
+                    <div className="flex-1">
                       <p className="font-medium text-gray-900">
                         <span className="font-bold">{log.userName || 'System'}</span>
                         {' '}
@@ -68,6 +82,25 @@ export function Timeline() {
                       </p>
                       {log.details && (
                         <p className="text-sm text-gray-600 mt-1">{log.details}</p>
+                      )}
+                      
+                      {log.userId && log.userId !== currentUserId && (
+                        <div className="mt-2 flex items-center gap-2">
+                          <button
+                            onClick={() => handleGiveKudo(log.id)}
+                            className="text-sm px-2 py-1 bg-pink-50 text-pink-600 rounded hover:bg-pink-100 transition-colors border border-pink-100 flex items-center gap-1"
+                          >
+                            <span>❤️ Kudos</span>
+                            {log.kudosCount > 0 && (
+                              <span className="font-bold">{log.kudosCount}</span>
+                            )}
+                          </button>
+                        </div>
+                      )}
+                      {log.userId === currentUserId && log.kudosCount > 0 && (
+                        <div className="mt-2 text-xs text-pink-600 font-medium">
+                          ❤️ {log.kudosCount} Kudos received
+                        </div>
                       )}
                     </div>
                     <span className="text-xs text-gray-400 whitespace-nowrap ml-4">

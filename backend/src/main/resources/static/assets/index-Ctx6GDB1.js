@@ -9936,7 +9936,10 @@ var api = {
 	completeTask: (id, userId) => request(`${API_BASE}/tasks/${id}/complete?userId=${userId}`, { method: "POST" }),
 	uncompleteTask: (id) => request(`${API_BASE}/tasks/${id}/uncomplete`, { method: "POST" }),
 	getHistory: () => request(`${API_BASE}/history`),
-	getTaskHistory: (taskId) => request(`${API_BASE}/history/task/${taskId}`)
+	getTaskHistory: (taskId) => request(`${API_BASE}/history/task/${taskId}`),
+	giveKudo: (activityId, userId) => request(`${API_BASE}/kudos/${activityId}?userId=${userId}`, { method: "POST" }),
+	getUnseenKudos: (userId) => request(`${API_BASE}/kudos/unseen?userId=${userId}`),
+	markKudosSeen: (userId) => request(`${API_BASE}/kudos/mark-seen?userId=${userId}`, { method: "POST" })
 };
 //#endregion
 //#region node_modules/react/cjs/react-jsx-runtime.production.js
@@ -10626,21 +10629,29 @@ function Statistics() {
 }
 //#endregion
 //#region src/pages/Timeline.tsx
-function Timeline() {
+function Timeline({ currentUserId }) {
 	const [history, setHistory] = (0, import_react.useState)([]);
 	const [loading, setLoading] = (0, import_react.useState)(true);
-	(0, import_react.useEffect)(() => {
-		async function loadHistory() {
-			try {
-				setHistory(await api.getHistory());
-			} catch (error) {
-				console.error("Error loading history:", error);
-			} finally {
-				setLoading(false);
-			}
+	const loadHistory = async () => {
+		try {
+			setHistory(await api.getHistory());
+		} catch (error) {
+			console.error("Error loading history:", error);
+		} finally {
+			setLoading(false);
 		}
+	};
+	(0, import_react.useEffect)(() => {
 		loadHistory();
 	}, []);
+	const handleGiveKudo = async (activityId) => {
+		try {
+			await api.giveKudo(activityId, currentUserId);
+			await loadHistory();
+		} catch (error) {
+			console.error("Error giving kudo:", error);
+		}
+	};
 	const formatDate = (dateStr) => {
 		return new Date(dateStr).toLocaleString();
 	};
@@ -10681,32 +10692,57 @@ function Timeline() {
 						className: "p-4 hover:bg-gray-50 transition-colors",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex justify-between items-start",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-								className: "font-medium text-gray-900",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex-1",
 								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "font-bold",
-										children: log.userName || "System"
-									}),
-									" ",
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: getActionColor(log.action),
-										children: log.action.toLowerCase()
-									}),
-									" task: ",
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-										className: "italic",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "font-medium text-gray-900",
 										children: [
-											"\"",
-											log.taskTitle || `Task #${log.taskId}`,
-											"\""
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "font-bold",
+												children: log.userName || "System"
+											}),
+											" ",
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: getActionColor(log.action),
+												children: log.action.toLowerCase()
+											}),
+											" task: ",
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "italic",
+												children: [
+													"\"",
+													log.taskTitle || `Task #${log.taskId}`,
+													"\""
+												]
+											})
+										]
+									}),
+									log.details && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-sm text-gray-600 mt-1",
+										children: log.details
+									}),
+									log.userId && log.userId !== currentUserId && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "mt-2 flex items-center gap-2",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											onClick: () => handleGiveKudo(log.id),
+											className: "text-sm px-2 py-1 bg-pink-50 text-pink-600 rounded hover:bg-pink-100 transition-colors border border-pink-100 flex items-center gap-1",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "❤️ Kudos" }), log.kudosCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "font-bold",
+												children: log.kudosCount
+											})]
+										})
+									}),
+									log.userId === currentUserId && log.kudosCount > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mt-2 text-xs text-pink-600 font-medium",
+										children: [
+											"❤️ ",
+											log.kudosCount,
+											" Kudos received"
 										]
 									})
 								]
-							}), log.details && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-sm text-gray-600 mt-1",
-								children: log.details
-							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "text-xs text-gray-400 whitespace-nowrap ml-4",
 								children: formatDate(log.timestamp)
 							})]
@@ -10722,37 +10758,121 @@ function Timeline() {
 function App() {
 	const [currentUser, setCurrentUser] = (0, import_react.useState)(null);
 	const [view, setView] = (0, import_react.useState)("dashboard");
+	const [newKudos, setNewKudos] = (0, import_react.useState)([]);
+	const [showKudosModal, setShowKudosModal] = (0, import_react.useState)(false);
+	(0, import_react.useEffect)(() => {
+		if (currentUser) {
+			const checkKudos = async () => {
+				try {
+					const kudos = await api.getUnseenKudos(currentUser.id);
+					if (kudos.length > 0) {
+						setNewKudos(kudos);
+						setShowKudosModal(true);
+					}
+				} catch (error) {
+					console.error("Error checking kudos:", error);
+				}
+			};
+			checkKudos();
+		}
+	}, [currentUser]);
+	const handleCloseKudos = async () => {
+		if (currentUser) try {
+			await api.markKudosSeen(currentUser.id);
+			setShowKudosModal(false);
+		} catch (error) {
+			console.error("Error marking kudos seen:", error);
+		}
+	};
 	if (!currentUser) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoginPage, { onLogin: setCurrentUser });
 	const handleLogout = () => {
 		setCurrentUser(null);
 		setView("dashboard");
 	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "bg-white border-b border-gray-200",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "max-w-7xl mx-auto px-4 py-2 flex justify-end gap-4",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					onClick: () => setView("dashboard"),
-					className: `px-3 py-1 text-sm font-medium rounded ${view === "dashboard" ? "bg-blue-100 text-blue-800" : "text-gray-600 hover:text-gray-800"}`,
-					children: "Dashboard"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					onClick: () => setView("statistics"),
-					className: `px-3 py-1 text-sm font-medium rounded ${view === "statistics" ? "bg-blue-100 text-blue-800" : "text-gray-600 hover:text-gray-800"}`,
-					children: "Statistics"
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					onClick: () => setView("timeline"),
-					className: `px-3 py-1 text-sm font-medium rounded ${view === "timeline" ? "bg-blue-100 text-blue-800" : "text-gray-600 hover:text-gray-800"}`,
-					children: "Timeline"
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "min-h-screen bg-gray-100",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "bg-white border-b border-gray-200",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "max-w-7xl mx-auto px-4 py-2 flex justify-end gap-4",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => setView("dashboard"),
+							className: `px-3 py-1 text-sm font-medium rounded ${view === "dashboard" ? "bg-blue-100 text-blue-800" : "text-gray-600 hover:text-gray-800"}`,
+							children: "Dashboard"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => setView("statistics"),
+							className: `px-3 py-1 text-sm font-medium rounded ${view === "statistics" ? "bg-blue-100 text-blue-800" : "text-gray-600 hover:text-gray-800"}`,
+							children: "Statistics"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => setView("timeline"),
+							className: `px-3 py-1 text-sm font-medium rounded ${view === "timeline" ? "bg-blue-100 text-blue-800" : "text-gray-600 hover:text-gray-800"}`,
+							children: "Timeline"
+						})
+					]
 				})
-			]
-		})
-	}), view === "dashboard" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dashboard, {
-		currentUser,
-		onLogout: handleLogout
-	}) : view === "statistics" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Statistics, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Timeline, {})] });
+			}),
+			view === "dashboard" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Dashboard, {
+				currentUser,
+				onLogout: handleLogout
+			}) : view === "statistics" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Statistics, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Timeline, { currentUserId: currentUser.id }),
+			showKudosModal && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "bg-white rounded-xl shadow-2xl max-w-md w-full p-6 animate-bounce",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "text-center",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "text-5xl mb-4",
+								children: "🎉"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-2xl font-bold text-gray-800 mb-2",
+								children: "You got Kudos!"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-gray-600 mb-6",
+								children: "Family members appreciated your recent activity:"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "space-y-3 mb-8 text-left max-h-48 overflow-y-auto",
+								children: newKudos.map((kudo) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "bg-pink-50 p-3 rounded-lg border border-pink-100",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "font-bold text-pink-700",
+											children: kudo.giverName
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-pink-600",
+											children: " gave you kudos for "
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "font-medium text-pink-700 italic",
+											children: [
+												"\"",
+												kudo.taskTitle,
+												"\""
+											]
+										})
+									]
+								}, kudo.id))
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: handleCloseKudos,
+								className: "w-full py-3 bg-pink-500 text-white rounded-lg font-bold hover:bg-pink-600 transition-colors",
+								children: "Awesome!"
+							})
+						]
+					})
+				})
+			})
+		]
+	});
 }
 //#endregion
 //#region src/main.tsx

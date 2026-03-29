@@ -7,6 +7,7 @@ import { api } from '../../services/api';
 vi.mock('../../services/api', () => ({
   api: {
     getHistory: vi.fn(),
+    giveKudo: vi.fn(),
   }
 }));
 
@@ -20,7 +21,8 @@ describe('Timeline', () => {
       userId: 1,
       userName: 'Alice',
       timestamp: '2025-03-28T10:00:00Z',
-      details: 'Task created'
+      details: 'Task created',
+      kudosCount: 0
     },
     {
       id: 2,
@@ -30,7 +32,8 @@ describe('Timeline', () => {
       userId: 2,
       userName: 'Bob',
       timestamp: '2025-03-28T11:00:00Z',
-      details: 'Task completed'
+      details: 'Task completed',
+      kudosCount: 1
     }
   ];
 
@@ -41,12 +44,12 @@ describe('Timeline', () => {
 
   it('renders loading state initially', () => {
     vi.mocked(api.getHistory).mockReturnValue(new Promise(() => {}));
-    render(<Timeline />);
+    render(<Timeline currentUserId={1} />);
     expect(screen.getByText(/loading timeline.../i)).toBeInTheDocument();
   });
 
   it('renders timeline correctly after loading', async () => {
-    render(<Timeline />);
+    render(<Timeline currentUserId={1} />);
     
     await waitFor(() => expect(screen.queryByText(/loading timeline.../i)).not.toBeInTheDocument());
     
@@ -58,7 +61,7 @@ describe('Timeline', () => {
   });
 
   it('matches snapshot', async () => {
-    const { asFragment } = render(<Timeline />);
+    const { asFragment } = render(<Timeline currentUserId={1} />);
     await waitFor(() => expect(screen.queryByText(/loading timeline.../i)).not.toBeInTheDocument());
     expect(asFragment()).toMatchSnapshot();
   });
