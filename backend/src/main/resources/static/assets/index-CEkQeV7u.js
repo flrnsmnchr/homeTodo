@@ -10423,14 +10423,23 @@ function Dashboard({ currentUser, onLogout }) {
 					children: "Family Todo App"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex items-center gap-4",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-						className: "text-gray-600",
-						children: ["Hello, ", currentUser.name]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						onClick: onLogout,
-						className: "px-3 py-1 text-sm text-gray-600 hover:text-gray-800",
-						children: "Logout"
-					})]
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "text-gray-600",
+							children: ["Hello, ", currentUser.name]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: onLogout,
+							className: "px-3 py-1 text-sm text-gray-600 hover:text-gray-800",
+							children: "Logout"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: () => loadTasks(),
+							className: "px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded border hover:bg-gray-200 transition-colors flex items-center gap-1",
+							title: "Refresh data",
+							children: "🔄 Reload"
+						})
+					]
 				})]
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
@@ -10537,18 +10546,19 @@ function Dashboard({ currentUser, onLogout }) {
 function Statistics() {
 	const [stats, setStats] = (0, import_react.useState)([]);
 	const [loading, setLoading] = (0, import_react.useState)(true);
-	(0, import_react.useEffect)(() => {
-		async function loadStats() {
-			try {
-				setStats(await api.getUserStatistics());
-			} catch (error) {
-				console.error("Error loading statistics:", error);
-			} finally {
-				setLoading(false);
-			}
+	const loadStats = (0, import_react.useCallback)(async () => {
+		setLoading(true);
+		try {
+			setStats(await api.getUserStatistics());
+		} catch (error) {
+			console.error("Error loading statistics:", error);
+		} finally {
+			setLoading(false);
 		}
-		loadStats();
 	}, []);
+	(0, import_react.useEffect)(() => {
+		loadStats();
+	}, [loadStats]);
 	if (loading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "min-h-screen flex items-center justify-center bg-gray-100",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -10560,12 +10570,17 @@ function Statistics() {
 		className: "min-h-screen bg-gray-100 p-6",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "max-w-4xl mx-auto",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "mb-8",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mb-8 flex justify-between items-center",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 					className: "text-2xl font-bold text-gray-800",
 					children: "Task Overview"
-				})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					onClick: loadStats,
+					className: "px-3 py-1.5 text-sm bg-white text-gray-700 rounded border hover:bg-gray-50 transition-colors flex items-center gap-2",
+					title: "Refresh statistics",
+					children: "🔄 Reload"
+				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "grid gap-6 md:grid-cols-2",
 				children: stats.map((user) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -10632,7 +10647,8 @@ function Statistics() {
 function Timeline({ currentUserId }) {
 	const [history, setHistory] = (0, import_react.useState)([]);
 	const [loading, setLoading] = (0, import_react.useState)(true);
-	const loadHistory = async () => {
+	const loadHistory = (0, import_react.useCallback)(async () => {
+		setLoading(true);
 		try {
 			setHistory(await api.getHistory());
 		} catch (error) {
@@ -10640,10 +10656,10 @@ function Timeline({ currentUserId }) {
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, []);
 	(0, import_react.useEffect)(() => {
 		loadHistory();
-	}, []);
+	}, [loadHistory]);
 	const handleGiveKudo = async (activityId) => {
 		try {
 			await api.giveKudo(activityId, currentUserId);
@@ -10675,12 +10691,17 @@ function Timeline({ currentUserId }) {
 		className: "min-h-screen bg-gray-100 p-6",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "max-w-4xl mx-auto",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "mb-8",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mb-8 flex justify-between items-center",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 					className: "text-2xl font-bold text-gray-800",
 					children: "Recent Activity"
-				})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					onClick: loadHistory,
+					className: "px-3 py-1.5 text-sm bg-white text-gray-700 rounded border hover:bg-gray-50 transition-colors flex items-center gap-2",
+					title: "Refresh activity",
+					children: "🔄 Reload"
+				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "bg-white rounded-lg shadow overflow-hidden",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
