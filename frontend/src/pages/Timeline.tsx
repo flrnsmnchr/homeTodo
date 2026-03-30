@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { api } from '../services/api';
 import type { ActivityLog } from '../types';
 
@@ -10,7 +10,8 @@ export function Timeline({ currentUserId }: TimelineProps) {
   const [history, setHistory] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadHistory = async () => {
+  const loadHistory = useCallback(async () => {
+    setLoading(true);
     try {
       const data = await api.getHistory();
       setHistory(data);
@@ -19,11 +20,11 @@ export function Timeline({ currentUserId }: TimelineProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadHistory();
-  }, []);
+  }, [loadHistory]);
 
   const handleGiveKudo = async (activityId: number) => {
     try {
@@ -60,8 +61,15 @@ export function Timeline({ currentUserId }: TimelineProps) {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
+        <div className="mb-8 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-800">Recent Activity</h1>
+          <button
+            onClick={loadHistory}
+            className="px-3 py-1.5 text-sm bg-white text-gray-700 rounded border hover:bg-gray-50 transition-colors flex items-center gap-2"
+            title="Refresh activity"
+          >
+            🔄 Reload
+          </button>
         </div>
 
         <div className="bg-white rounded-lg shadow overflow-hidden">

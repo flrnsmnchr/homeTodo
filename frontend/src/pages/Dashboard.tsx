@@ -128,14 +128,21 @@ export function Dashboard({ currentUser, onLogout }: DashboardProps) {
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold text-gray-800">Family Todo App</h1>
           <div className="flex items-center gap-4">
-            <span className="text-gray-600">Hello, {currentUser.name}</span>
+           <span className="text-gray-600">Hello, {currentUser.name}</span>
             <button
               onClick={onLogout}
               className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800"
             >
               Logout
             </button>
-          </div>
+            <button
+              onClick={() => loadTasks()}
+              className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded border hover:bg-gray-200 transition-colors flex items-center gap-1"
+              title="Refresh data"
+            >
+              🔄 Reload
+            </button>
+           </div>
         </div>
       </header>
 

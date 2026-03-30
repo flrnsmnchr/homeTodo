@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { api } from '../services/api';
 import type { UserStatistics } from '../types';
 
@@ -6,19 +6,21 @@ export function Statistics() {
   const [stats, setStats] = useState<UserStatistics[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function loadStats() {
-      try {
-        const data = await api.getUserStatistics();
-        setStats(data);
-      } catch (error) {
-        console.error('Error loading statistics:', error);
-      } finally {
-        setLoading(false);
-      }
+  const loadStats = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await api.getUserStatistics();
+      setStats(data);
+    } catch (error) {
+      console.error('Error loading statistics:', error);
+    } finally {
+      setLoading(false);
     }
-    loadStats();
   }, []);
+
+  useEffect(() => {
+    loadStats();
+  }, [loadStats]);
 
   if (loading) {
     return (
@@ -31,8 +33,15 @@ export function Statistics() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
+        <div className="mb-8 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-800">Task Overview</h1>
+          <button
+            onClick={loadStats}
+            className="px-3 py-1.5 text-sm bg-white text-gray-700 rounded border hover:bg-gray-50 transition-colors flex items-center gap-2"
+            title="Refresh statistics"
+          >
+            🔄 Reload
+          </button>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
