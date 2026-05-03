@@ -8,8 +8,8 @@ group = 'net.simnacher'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '25'
-    targetCompatibility = '25'
+    sourceCompatibility = '26'
+    targetCompatibility = '26'
 }
 
 repositories {
