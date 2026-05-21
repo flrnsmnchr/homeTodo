@@ -132,6 +132,17 @@ cd backend
 .\gradlew test
 ```
 
+Coverage report:
+
+```powershell
+cd backend
+.\gradlew test jacocoTestReport
+```
+
+Open the HTML coverage report at:
+
+`backend/build/reports/jacoco/test/html/index.html`
+
 ### Frontend
 
 ```powershell
