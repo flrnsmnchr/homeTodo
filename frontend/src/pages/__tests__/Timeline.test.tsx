@@ -53,10 +53,10 @@ describe('Timeline', () => {
     
     await waitFor(() => expect(screen.queryByText(/loading timeline.../i)).not.toBeInTheDocument());
     
-    expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
-    expect(screen.getByText(/created/i)).toBeInTheDocument();
-    expect(screen.getByText(/completed/i)).toBeInTheDocument();
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getAllByText(/created/i)).toHaveLength(2);
+    expect(screen.getAllByText(/completed/i)).toHaveLength(2);
     expect(screen.getAllByText(/"Buy Milk"/i)).toHaveLength(2);
   });
 

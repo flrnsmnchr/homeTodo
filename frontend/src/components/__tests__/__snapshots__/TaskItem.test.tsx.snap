@@ -35,6 +35,11 @@ exports[`TaskItem > renders completed task correctly (snapshot) 1`] = `
             Due: 2.1.2025
           </span>
           <span
+            class="text-gray-400 ml-1"
+          >
+            (#1)
+          </span>
+          <span
             class="text-purple-600"
           >
             🔄 daily
@@ -98,6 +103,11 @@ exports[`TaskItem > renders correctly (snapshot) 1`] = `
           </span>
           <span>
             Due: 2.1.2025
+          </span>
+          <span
+            class="text-gray-400 ml-1"
+          >
+            (#1)
           </span>
           <span
             class="text-purple-600"

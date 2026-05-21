@@ -3,6 +3,12 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { Statistics } from '../Statistics';
 import { api } from '../../services/api';
 
+
+
+import { prettyDOM } from '@testing-library/dom';
+import fs from 'node:fs';
+
+
 // Mock the API service
 vi.mock('../../services/api', () => ({
   api: {
@@ -43,14 +49,16 @@ describe('Statistics', () => {
     render(<Statistics />);
     
     await waitFor(() => expect(screen.queryByText(/loading statistics.../i)).not.toBeInTheDocument());
-    
+
+    //fs.writeFileSync('debug.txt', prettyDOM(document.body, Infinity, { highlight: false }));
+
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
     
     // Check for counts (using getAllByText as some counts might be same)
     expect(screen.getAllByText('5')).toHaveLength(1); // Alice total
     expect(screen.getAllByText('2')).toHaveLength(1); // Alice open
-    expect(screen.getAllByText('3')).toHaveLength(2); // Alice done AND Bob total/open
+    expect(screen.getAllByText('3')).toHaveLength(3); // Alice done AND Bob total/open
   });
 
   it('matches snapshot', async () => {

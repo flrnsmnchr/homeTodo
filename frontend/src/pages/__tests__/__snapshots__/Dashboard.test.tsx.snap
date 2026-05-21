@@ -29,6 +29,12 @@ exports[`Dashboard > renders dashboard with tasks after loading (snapshot) 1`] =
           >
             Logout
           </button>
+          <button
+            class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded border hover:bg-gray-200 transition-colors flex items-center gap-1"
+            title="Refresh data"
+          >
+            🔄 Reload
+          </button>
         </div>
       </div>
     </header>
@@ -60,13 +66,9 @@ exports[`Dashboard > renders dashboard with tasks after loading (snapshot) 1`] =
               <button
                 class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
               >
-                In Progress
-              </button>
-              <button
-                class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
-              >
                 Completed
               </button>
+                              
               <button
                 class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
               >
@@ -114,6 +116,11 @@ exports[`Dashboard > renders dashboard with tasks after loading (snapshot) 1`] =
             >
               Sort by Due Date
             </option>
+            <option
+              value="title"
+            >
+              Sort by Title
+            </option>
           </select>
           <button
             class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm font-medium"
@@ -153,6 +160,11 @@ exports[`Dashboard > renders dashboard with tasks after loading (snapshot) 1`] =
                   class="px-2 py-0.5 rounded bg-blue-100 text-blue-800"
                 >
                   Test User
+                </span>
+                <span
+                  class="text-gray-400 ml-1"
+                >
+                  (#1)
                 </span>
               </div>
             </div>
@@ -212,6 +224,12 @@ exports[`Dashboard > renders empty dashboard correctly (snapshot) 1`] = `
           >
             Logout
           </button>
+          <button
+            class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded border hover:bg-gray-200 transition-colors flex items-center gap-1"
+            title="Refresh data"
+          >
+            🔄 Reload
+          </button>
         </div>
       </div>
     </header>
@@ -243,13 +261,9 @@ exports[`Dashboard > renders empty dashboard correctly (snapshot) 1`] = `
               <button
                 class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
               >
-                In Progress
-              </button>
-              <button
-                class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
-              >
                 Completed
               </button>
+                              
               <button
                 class="px-3 py-1.5 text-sm rounded transition-colors bg-white text-gray-700 border hover:bg-gray-50"
               >
@@ -296,6 +310,11 @@ exports[`Dashboard > renders empty dashboard correctly (snapshot) 1`] = `
               value="dueDate"
             >
               Sort by Due Date
+            </option>
+            <option
+              value="title"
+            >
+              Sort by Title
             </option>
           </select>
           <button

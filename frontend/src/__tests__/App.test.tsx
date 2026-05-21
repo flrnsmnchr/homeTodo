@@ -9,6 +9,8 @@ vi.mock('../services/api', () => ({
     getUsers: vi.fn(),
     getHistory: vi.fn(),
     getTasks: vi.fn(),
+    getUnseenKudos: vi.fn(),
+    markKudosSeen: vi.fn(),
   }
 }));
 
@@ -18,6 +20,7 @@ describe('App', () => {
     vi.mocked(api.getUsers).mockResolvedValue([{ id: 1, name: 'Test User' }]);
     vi.mocked(api.getHistory).mockResolvedValue([]);
     vi.mocked(api.getTasks).mockResolvedValue([]);
+    vi.mocked(api.getUnseenKudos).mockResolvedValue([]);
   });
 
   it('renders login page initially (snapshot)', async () => {
