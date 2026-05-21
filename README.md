@@ -141,6 +141,16 @@ npm test -- --run
 
 Test suites exist for controllers and services in the backend and for pages/components in the frontend.
 
+### End-to-End
+
+```powershell
+cd frontend
+npm run test:e2e:install
+npm run test:e2e
+```
+
+The Playwright suite starts the Spring Boot backend against an isolated SQLite database and runs the Vite frontend with API proxying enabled.
+
 ## Seed Data
 
 On startup, the backend seeds default users if the `users` table is empty:

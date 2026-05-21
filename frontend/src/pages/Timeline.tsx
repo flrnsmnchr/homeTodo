@@ -73,7 +73,7 @@ export function Timeline({ currentUserId }: TimelineProps) {
         </div>
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="divide-y divide-gray-200">
+          <div id="timeline-activity-list" className="divide-y divide-gray-200">
             {history.length === 0 ? (
               <div className="p-8 text-center text-gray-500">No activity recorded yet.</div>
             ) : (
