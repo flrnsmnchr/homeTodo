@@ -3,11 +3,9 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { Statistics } from '../Statistics';
 import { api } from '../../services/api';
 
-
-
-import { prettyDOM } from '@testing-library/dom';
-import fs from 'node:fs';
-
+// import { prettyDOM } from '@testing-library/dom';
+// import fs from 'node:fs';
+//fs.writeFileSync('debug.txt', prettyDOM(document.body, Infinity, { highlight: false }));
 
 // Mock the API service
 vi.mock('../../services/api', () => ({
@@ -49,8 +47,6 @@ describe('Statistics', () => {
     render(<Statistics />);
     
     await waitFor(() => expect(screen.queryByText(/loading statistics.../i)).not.toBeInTheDocument());
-
-    //fs.writeFileSync('debug.txt', prettyDOM(document.body, Infinity, { highlight: false }));
 
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
