@@ -28,6 +28,7 @@ exports[`Timeline > matches snapshot 1`] = `
       >
         <div
           class="divide-y divide-gray-200"
+          id="timeline-activity-list"
         >
           <div
             class="p-4 hover:bg-gray-50 transition-colors"
