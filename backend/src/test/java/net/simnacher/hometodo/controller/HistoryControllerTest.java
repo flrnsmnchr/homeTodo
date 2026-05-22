@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,9 +32,11 @@ class HistoryControllerTest {
 
         ResponseEntity<List<Map<String, Object>>> response = historyController.getAllHistory();
 
+        assertEquals(200, response.getStatusCode().value());
         assertNotNull(response.getBody());
         assertEquals(1, response.getBody().size());
         assertEquals("CREATED", response.getBody().get(0).get("action"));
+        verify(activityService).getAllActivityLogs();
     }
 
     @Test
@@ -43,7 +46,9 @@ class HistoryControllerTest {
 
         ResponseEntity<List<Map<String, Object>>> response = historyController.getTaskHistory(10L);
 
+        assertEquals(200, response.getStatusCode().value());
         assertNotNull(response.getBody());
         assertEquals(10L, response.getBody().get(0).get("taskId"));
+        verify(activityService).getActivityLogForTask(10L);
     }
 }

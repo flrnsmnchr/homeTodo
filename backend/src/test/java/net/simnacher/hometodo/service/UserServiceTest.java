@@ -1,7 +1,6 @@
 package net.simnacher.hometodo.service;
 import net.simnacher.hometodo.dto.UserDTO;
 import net.simnacher.hometodo.dto.UserStatisticsDTO;
-import net.simnacher.hometodo.model.Task;
 import net.simnacher.hometodo.model.TaskStatus;
 import net.simnacher.hometodo.model.User;
 import net.simnacher.hometodo.repository.TaskRepository;
